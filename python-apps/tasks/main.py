@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File
+from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse
 from database import untils
 from models import Task, SubtaskСomplite
@@ -15,8 +15,8 @@ def create_task(task: Task):
 
 
 @app.post("/load-img")
-def load_img(image: File(), creater_login: str):
-    pass
+def load_img(image: UploadFile = File(...), creater_login: str = Form(...)):
+    return {"message": "File received", "filename": image.filename, "creater_login": creater_login}
 
 @app.get("/get-tasks")
 def get_tasks():
