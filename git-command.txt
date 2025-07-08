@@ -1,0 +1,15 @@
+Сохранение изменений для коммита:
+git add .
+
+Создание коммита:
+git commit -m "Название коммита"
+
+Обновление клавной ветки:
+git push lsh25_remote main
+
+Обновление локальной главной папки и загрузка:
+git checkout main
+git pull lsh25_remote main
+
+Получение изменений главной ветки:
+git pull lsh25_remote main
