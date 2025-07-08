@@ -83,6 +83,7 @@ def complete_subtask(data: dict) -> tuple:
     task = work.find_one({"_id": ObjectId(data["task_id"])})
     subtasks = task["subtasks"]
     compile_subtask_count = int(task["responseCount"].split("/")[0])
+
     if task is None:
         return 1, "Not exist", "TASK"
     answer_to_problems = data["responseAnswer"]

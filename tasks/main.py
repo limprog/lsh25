@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, File
 from fastapi.responses import JSONResponse
 from database import untils
 from models import Task, SubtaskСomplite
@@ -6,39 +6,43 @@ from models import Task, SubtaskСomplite
 app = FastAPI()
 
 
-@app.post("/api/tasks/create-task")
+@app.post("/create-task")
 def create_task(task: Task):
     answer = untils.create_task(task)
     if answer[0] != 0:
-        return JSONResponse(content={"answer": answer[1]}, status_code=400)
+        return JSONResponse(content={"answer": answer[1], "ok": False}, status_code=400)
     return JSONResponse(content={"answer": answer[1], "id": str(answer[2])}, status_code=201)
 
 
-@app.get("/api/tasks/get-tasks")
+@app.post("/load-img")
+def load_img(image: File(), creater_login: str):
+    pass
+
+@app.get("/get-tasks")
 def get_tasks():
     tasks = untils.get_tasks()
     return tasks
 
 
-@app.get("/api/tasks/get-history")
+@app.get("/get-history")
 def get_histary():
     tasks = untils.get_history()
     return tasks
 
 
-@app.get("/api/tasks/get-user-tasks")
+@app.get("/get-user-tasks")
 def get_tasks(userLogin: str):
     tasks = untils.get_user_tasks(userLogin)
     return tasks
 
 
-@app.get("/api/tasks/get-creater-task")
+@app.get("/get-creater-task")
 def get_creator_task(createrLogin: str):
     tasks = untils.get_creator_task(createrLogin)
     return tasks
 
 
-@app.delete("/api/tasks/delete-task")
+@app.delete("/delete-task")
 def delete_task(id: str):
     result = untils.delete_task(id)
     if result[0] != 0:
@@ -46,7 +50,7 @@ def delete_task(id: str):
     return JSONResponse(content={"answer": result[1]}, status_code=200)
 
 
-@app.patch("/api/tasks/update-task")
+@app.patch("/update-task")
 def update_task(id: str, task: Task):
     result = untils.update_task(id, task.dict())
     if result[0] != 0:
@@ -54,7 +58,7 @@ def update_task(id: str, task: Task):
     return JSONResponse(content={"answer": result[1]}, status_code=200)
 
 
-@app.put("/api/tasks/complete-subtask")
+@app.put("/complete-subtask")
 def complete_subtask(data: SubtaskСomplite):
     answer = untils.complete_subtask(data.dict())
     if answer[0] == 1:
