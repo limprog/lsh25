@@ -1,5 +1,4 @@
 fastapi
 uvicorn[standard]
 pymongo==4.6.1
-bson
 pydantic
