@@ -17,8 +17,8 @@ git pull lsh25_remote main
 
 git add .
 git commit -m "New"
-git push lsh25_remote main
+git push lsh25_remote vps_server
 
 
 git fetch --all
-git reset --hard origin/main    
+git reset --hard origin/vps_server    
