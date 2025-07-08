@@ -18,3 +18,7 @@ git pull lsh25_remote main
 git add .
 git commit -m "New"
 git push lsh25_remote main
+
+
+git fetch --all
+git reset --hard origin/main    
