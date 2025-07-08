@@ -77,19 +77,18 @@ services:
   # --- Сервис 6: NGINX ---
   # Прокси-сервер NGINX, который будет маршрутизировать запросы к вашим Python-серверам.
   # Убедитесь, что рядом есть папка `nginx` с Dockerfile и файлом `nginx.conf`.
-  #nginx:
-  #  build: ./nginx # Путь к папке с Dockerfile для сборки образа NGINX
-  #  container_name: nginx_proxy
-  #  ports:
-  #    - "80:80"   # Стандартный HTTP порт: для доступа к вашему сайту извне.
-  #    - "443:443" # Стандартный HTTPS порт: для защищенного доступа (потребует настройки SSL/TLS).
-  #  depends_on:
-  #    # NGINX должен запуститься после Python-серверов, чтобы он мог к ним проксировать запросы.
-  #    - python-server-1
-  #    - python-server-2
-  #    - python-server-3
-  #  networks:
-  #    - app_network
+  nginx:
+    build: ./nginx # Путь к папке с Dockerfile для сборки образа NGINX
+    container_name: nginx_proxy
+    ports:
+     - "80:80"   # Стандартный HTTP порт: для доступа к вашему сайту извне.
+     - "443:443" # Стандартный HTTPS порт: для защищенного доступа (потребует настройки SSL/TLS).
+    depends_on:
+     # NGINX должен запуститься после Python-серверов, чтобы он мог к ним проксировать запросы.
+      - python-app-tasks
+      - python-app-users
+    networks:
+     - app_network
 
 # --- Определение общих ресурсов ---
 
