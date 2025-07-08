@@ -78,7 +78,7 @@ services:
   # Прокси-сервер NGINX, который будет маршрутизировать запросы к вашим Python-серверам.
   # Убедитесь, что рядом есть папка `nginx` с Dockerfile и файлом `nginx.conf`.
   nginx:
-    build: ./nginx # Путь к папке с Dockerfile для сборки образа NGINX
+    build: ../nginx # Путь к папке с Dockerfile для сборки образа NGINX
     container_name: nginx_proxy
     ports:
      - "80:80"   # Стандартный HTTP порт: для доступа к вашему сайту извне.
