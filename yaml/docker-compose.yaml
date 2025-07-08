@@ -1,50 +1,126 @@
-version: '3.8'
+version: '3.8' # Рекомендуемая версия Compose файла
 
 services:
   # --- Сервис 1: MongoDB для пользователей ---
+  # Этот сервис запускает базу данных MongoDB для хранения данных пользователей.
   mongodb-users:
-    image: mongo:latest
+    image: mongo:latest # Используем официальный образ MongoDB
     container_name: mongodb_users_db
     ports:
-      # Исправлено: используйте дефис для каждого проброса порта
-      - "27017:27017" # Теперь это правильно отформатировано как элемент массива
+      # ВНИМАНИЕ: Пробрасывать порты баз данных наружу небезопасно для продакшена без
+      # дополнительных мер защиты (например, файрвола, настроенного только на определённые IP).
+      # Если внешний доступ не нужен, закомментируйте эту строку:
+      - "27017:27017" # Пробрасываем порт 27017 хоста на порт 27017 контейнера (стандартный порт MongoDB)
     volumes:
+      # Именованный том для сохранения данных MongoDB.
+      # Данные будут храниться на VPS в директории, управляемой Docker.
       - mongodb_users_data:/data/db
     networks:
+      # Подключаем сервис к общей внутренней сети проекта.
       - app_network
 
   # --- Сервис 2: MongoDB для заданий ---
+  # Этот сервис запускает отдельную базу данных MongoDB для хранения данных заданий.
   mongodb-tasks:
     image: mongo:latest
     container_name: mongodb_tasks_db
     ports:
-      # Исправлено: используйте дефис для каждого проброса порта
-      - "27018:27017" # Теперь это правильно отформатировано как элемент массива
+      # ВНИМАНИЕ: Аналогично, пробрасывать порты баз данных наружу небезопасно.
+      # Используется другой хост-порт (27018), чтобы избежать конфликта,
+      # если 27017 уже занят или если вы хотите различать базы по портам извне.
+      - "27018:27017" # Пробрасываем порт 27018 хоста на порт 27017 контейнера
     volumes:
+      # Именованный том для сохранения данных MongoDB заданий.
       - mongodb_tasks_data:/data/db
     networks:
       - app_network
 
-  # ... (остальные ваши сервисы, скорее всего, уже правильно отформатированы, если у них несколько портов,
-  #      но перепроверьте их, если возникнут похожие ошибки)
+  # --- Сервис 3: Python Server 1 ---
+  # Один из трёх бэкенд-серверов на Python.
+  # Убедитесь, что рядом с docker-compose.yml есть папка `python_server_1`
+  # с вашим Dockerfile и кодом приложения.
   python-server-1:
-    # ...
+    build: ./python_server_1 # Указываем путь к папке с Dockerfile для сборки образа
+    container_name: python_server_1
     ports:
-      - "8000:8000" # Вероятно, уже правильно
-    # ...
+      # Пробрасываем порт 8000 хоста на порт 8000 контейнера.
+      # Ваш Python-сервер должен слушать именно на порту 8000 внутри контейнера.
+      - "8000:8000"
+    environment:
+      # Переменные окружения для подключения Python-сервера к базам данных MongoDB.
+      # Используются имена сервисов (mongodb-users, mongodb-tasks) как хосты.
+      MONGO_USERS_URI: mongodb://mongodb-users:27017/users_db
+      MONGO_TASKS_URI: mongodb://mongodb-tasks:27017/tasks_db
+    depends_on:
+      # Указываем зависимости: этот сервис запустится после того, как запустятся MongoDB.
+      # Это помогает с порядком запуска, но не гарантирует полную готовность БД.
+      - mongodb-users
+      - mongodb-tasks
+    networks:
+      - app_network
 
-  nginx:
-    # ...
+  # --- Сервис 4: Python Server 2 ---
+  # Второй бэкенд-сервер на Python.
+  # Убедитесь, что рядом есть папка `python_server_2` с Dockerfile и кодом.
+  python-server-2:
+    build: ./python_server_2
+    container_name: python_server_2
     ports:
-      - "80:80"   # Вероятно, уже правильно
-      - "443:443" # Вероятно, уже правильно
-    # ...
+      - "8001:8001" # Пробрасываем порт 8001 хоста на порт 8001 контейнера
+    environment:
+      MONGO_USERS_URI: mongodb://mongodb-users:27017/users_db
+      MONGO_TASKS_URI: mongodb://mongodb-tasks:27017/tasks_db
+    depends_on:
+      - mongodb-users
+      - mongodb-tasks
+    networks:
+      - app_network
+
+  # --- Сервис 5: Python Server 3 ---
+  # Третий бэкенд-сервер на Python.
+  # Убедитесь, что рядом есть папка `python_server_3` с Dockerfile и кодом.
+  python-server-3:
+    build: ./python_server_3
+    container_name: python_server_3
+    ports:
+      - "8002:8002" # Пробрасываем порт 8002 хоста на порт 8002 контейнера
+    environment:
+      MONGO_USERS_URI: mongodb://mongodb-users:27017/users_db
+      MONGO_TASKS_URI: mongodb://mongodb-tasks:27017/tasks_db
+    depends_on:
+      - mongodb-users
+      - mongodb-tasks
+    networks:
+      - app_network
+
+  # --- Сервис 6: NGINX ---
+  # Прокси-сервер NGINX, который будет маршрутизировать запросы к вашим Python-серверам.
+  # Убедитесь, что рядом есть папка `nginx` с Dockerfile и файлом `nginx.conf`.
+  nginx:
+    build: ./nginx # Путь к папке с Dockerfile для сборки образа NGINX
+    container_name: nginx_proxy
+    ports:
+      - "80:80"   # Стандартный HTTP порт: для доступа к вашему сайту извне.
+      - "443:443" # Стандартный HTTPS порт: для защищенного доступа (потребует настройки SSL/TLS).
+    depends_on:
+      # NGINX должен запуститься после Python-серверов, чтобы он мог к ним проксировать запросы.
+      - python-server-1
+      - python-server-2
+      - python-server-3
+    networks:
+      - app_network
 
 # --- Определение общих ресурсов ---
+
+# Определение внутренней Docker-сети, к которой будут подключены все сервисы.
+# Это позволяет им общаться друг с другом по именам сервисов (например, 'mongodb-users').
 networks:
   app_network:
-    driver: bridge
+    driver: bridge # Используем стандартный сетевой драйвер
 
+# Определение именованных томов для персистентного хранения данных.
+# Эти тома будут созданы и управляться Docker на вашей VPS,
+# сохраняя данные баз данных даже при удалении/пересоздании контейнеров.
 volumes:
   mongodb_users_data:
   mongodb_tasks_data:
