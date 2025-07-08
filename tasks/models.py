@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Dict
 
 
 class Subtask(BaseModel):
@@ -17,3 +17,8 @@ class Task(BaseModel):
     subtasks: List[Subtask]
     description: str
     responseFormat: List[ResponseFormat]
+
+
+class SubtaskСomplite(BaseModel):
+    task_id: str
+    responseAnswer: Dict[str, str]
