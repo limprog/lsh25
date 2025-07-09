@@ -6,6 +6,8 @@ from io import BytesIO
 from PIL import Image
 import os
 import time
+import binascii
+
 
 client = MongoClient('localhost', 27017)
 db = client.task_db
@@ -17,7 +19,13 @@ def create_task(rec, userLogin) -> tuple:
     rec = rec.dict()
     rec["createrLogin"] = userLogin
     rec['subtasks'] = enumerate_list(rec['subtasks'])
-    rec["subtasks"] = image_save(rec["subtasks"], rec["name"])
+    try:
+        rec["subtasks"] = image_save(rec["subtasks"], rec["name"])
+    except Exception as e:
+        print(str(e) == "image is not base64")
+        if str(e) == "image is not base64":
+            return 1, "image is not base64"
+
     rec["responseFormat"] = enumerate_list(rec["responseFormat"])
 
     rec["responseCount"] = f"0/{len(rec['subtasks'])}"
@@ -129,8 +137,12 @@ def image_save(data: list, name: str) -> list:
     os.makedirs("images", exist_ok=True)
     result = []
     for subtask in data:
-        if "image" in subtask.keys():
-            bytes_image = base64.b64decode(subtask["image"])
+        if subtask["image"]:
+            try:
+                bytes_image = base64.b64decode(subtask["image"])
+            except binascii.Error:
+                raise Exception("image is not base64")
+
             img = Image.open(BytesIO(bytes_image))
 
             path_img = f"images/{name}_{subtask["id"]}_{time.time()}.png"
