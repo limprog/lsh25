@@ -1,8 +1,9 @@
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 import pprint
+import os
 
-client = MongoClient('localhost', 27017)
+client = MongoClient(os.getenv("MONGO_TASKS_URI"))
 db = client.task_db
 work = db.task_work
 history = db.task_history
