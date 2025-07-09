@@ -12,7 +12,7 @@ class ResponseFormat(BaseModel):
 
 class Task(BaseModel):
     userLogin: str
-    createrLogin: str
+    createrLogin: str | None = None
     name: str
     subtasks: List[Subtask]
     description: str

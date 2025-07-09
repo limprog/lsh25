@@ -8,8 +8,9 @@ work = db.task_work
 history = db.task_history
 
 
-def create_task(rec) -> tuple:
+def create_task(rec, userLogin) -> tuple:
     rec = rec.dict()
+    rec["createrLogin"] = userLogin
     rec['subtasks'] = enumerate_list(rec['subtasks'])
     rec["responseFormat"] = enumerate_list(rec["responseFormat"])
 
@@ -107,7 +108,8 @@ def complete_subtask(data: dict) -> tuple:
         history.insert_one(task)
         return 0, "Task completed", 1
 
-    work.update_one({"_id": ObjectId(data["task_id"])}, {"$set": {"subtasks": subtasks, "responseCount": f"{compile_subtask_count}/{len(subtasks)}"}})
+    work.update_one({"_id": ObjectId(data["task_id"])},
+                    {"$set": {"subtasks": subtasks, "responseCount": f"{compile_subtask_count}/{len(subtasks)}"}})
     return 0, "ok", 0
 
 
