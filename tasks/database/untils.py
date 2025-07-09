@@ -1,6 +1,11 @@
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 import pprint
+import base64
+from io import BytesIO
+from PIL import Image
+import os
+import time
 
 client = MongoClient('localhost', 27017)
 db = client.task_db
@@ -12,6 +17,7 @@ def create_task(rec, userLogin) -> tuple:
     rec = rec.dict()
     rec["createrLogin"] = userLogin
     rec['subtasks'] = enumerate_list(rec['subtasks'])
+    rec["subtasks"] = image_save(rec["subtasks"], rec["name"])
     rec["responseFormat"] = enumerate_list(rec["responseFormat"])
 
     rec["responseCount"] = f"0/{len(rec['subtasks'])}"
@@ -68,7 +74,6 @@ def delete_task(id: str) -> tuple:
 
 
 def update_task(id: str, task: dict) -> tuple:
-
     task['subtasks'] = enumerate_list(task['subtasks'])
     task["responseFormat"] = enumerate_list(task["responseFormat"])
 
@@ -118,4 +123,21 @@ def enumerate_list(d: dict):
     for index, item in enumerate(d):
         temp.append({"id": index, **item})
     return temp
+
+
+def image_save(data: list, name: str) -> list:
+    os.makedirs("images", exist_ok=True)
+    result = []
+    for subtask in data:
+        if "image" in subtask.keys():
+            bytes_image = base64.b64decode(subtask["image"])
+            img = Image.open(BytesIO(bytes_image))
+
+            path_img = f"images/{name}_{subtask["id"]}_{time.time()}.png"
+            img.save(path_img, "PNG")
+            subtask.pop('image', None)
+            subtask["image_path"] = path_img
+            result.append(subtask)
+
+    return result
 

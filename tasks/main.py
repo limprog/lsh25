@@ -9,22 +9,13 @@ from fastapi.responses import JSONResponse
 app = FastAPI()
 
 
-#временный метод
-@app.get("/set-cookie")
-def set_cookie(login: str, res: Response):
-    res.set_cookie(key="userLogin", value=login)
-
-    return {"ok": True}
-
-
 @app.post("/create-task")
-def create_task(task: Task, userLogin = Cookie()):
-    answer = untils.create_task(task, userLogin)
+def create_task(task: Task):
+    answer = untils.create_task(task, "!")
 
-    print()
     if answer[0] != 0:
         return JSONResponse(content={"answer": answer[1], "ok": False}, status_code=400)
-    return JSONResponse(content={"answer": answer[1], "id": str(answer[2]), "ok": False}, status_code=201)
+    return JSONResponse(content={"answer": answer[1], "id": str(answer[2]), "ok": True}, status_code=201)
 
 
 # @app.post("/load-img")

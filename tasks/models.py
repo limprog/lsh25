@@ -4,6 +4,7 @@ from typing import List, Dict
 
 class Subtask(BaseModel):
     description: str
+    image: str | None = None
 
 
 class ResponseFormat(BaseModel):
