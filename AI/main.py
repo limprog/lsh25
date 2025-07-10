@@ -1,12 +1,14 @@
 from fastapi import FastAPI, File, Response, Cookie
 from fastapi.responses import JSONResponse
-from typing import List
 from database import utils
-from models import CreatAiTask, Update, TaskId, MarkerUpdate
+from models import CreatAiTask, Update, TaskId, MarkerUpdate, AiRequest
+from ai_fun import markers_analysis
+
 
 app = FastAPI()
 
 
+# Part without AI
 @app.post("/create-ai-task")
 def create_task(task: CreatAiTask):
     task = task.dict()
@@ -16,7 +18,10 @@ def create_task(task: CreatAiTask):
 
 @app.get("/get-ai-task")
 def get_ai_task(task_id: str):
-    return utils.get_ai_task(task_id)
+    res = utils.get_ai_task(task_id)
+    if not res:
+        return JSONResponse({"ok": False}, status_code=404)
+    return res
 
 
 @app.patch("/markers-update")
@@ -40,3 +45,16 @@ def update_task(upd: Update):
 def delete_ai_task(task_id: TaskId):
     utils.delete_ai_task(task_id.dict()["task_id"])
     return {"ok": True}
+
+
+#AI PART
+@app.get("/markers-answer")
+def get_markers_answer(task_id: str, text: str):
+    task = get_ai_task(task_id)
+    markers = task["markers"]
+    if not markers:
+        return JSONResponse(content={"ok": False, "mes": "Not markers"}, status_code=424)
+
+    result = markers_analysis(task["markers"], text)
+    return {"ok": True, "result": result}
+

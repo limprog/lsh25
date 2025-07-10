@@ -84,6 +84,12 @@ def delete_task(id: str) -> tuple:
 def update_task(id: str, task: dict) -> tuple:
     task['subtasks'] = enumerate_list(task['subtasks'])
     task["responseFormat"] = enumerate_list(task["responseFormat"])
+    try:
+        task["subtasks"] = image_save(task["subtasks"], task["name"])
+    except Exception as e:
+        print(str(e) == "image is not base64")
+        if str(e) == "image is not base64":
+            return 1, "image is not base64"
 
     task["responseCount"] = f"0/{len(task['subtasks'])}"
     res = work.update_one({"_id": ObjectId(id)}, {"$set": task})
@@ -149,6 +155,9 @@ def image_save(data: list, name: str) -> list:
             img.save(path_img, "PNG")
             subtask.pop('image', None)
             subtask["image_path"] = path_img
+            result.append(subtask)
+        else:
+            subtask.pop('image', None)
             result.append(subtask)
 
     return result

@@ -1,6 +1,7 @@
 from bson import ObjectId
 from pymongo import MongoClient
 from typing import List
+from ai_fun import lemmatize
 
 client = MongoClient('localhost', 27017)
 db = client.ai_db
@@ -8,12 +9,22 @@ table = db.ai
 
 
 def create_ai_task(task: dict) -> bool:
+    markers = task["markers"]
+    if markers:
+        for cl in markers:
+            temp_marker = []
+            for marker in markers[cl]:
+               temp_marker.append(lemmatize(marker))
+            markers[cl] = temp_marker
+
     table.insert_one(task)
     return True
 
 
 def get_ai_task(task_id: str):
     temp = table.find_one({'task_id': task_id})
+    if temp is None:
+        return False
     temp["_id"] = str(temp["_id"])
     return temp
 
