@@ -10,7 +10,7 @@
 <body>
   <header> <a href="" id="logo-text">ITMO FireFly</a>
     <div class="header-btn-layout">
-      <button class="header-btn">Войти</button>
+      <button class="header-btn" onclick="eventModalSign('open')">Войти</button>
     </div>
   </header>
   <main class="default-main">
@@ -19,7 +19,7 @@
         <h1>ITMO FireFly - современная
           <br>и многофункциональная
           <br>платформа разметки</h1>
-        <button class="start-btn-login">
+        <button class="start-btn-login" onclick="eventModalSign('open', 'customer')">
           <div class="text-btn">Войти как заказчик</div>
           <div class="icon-btn">
             <svg viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
@@ -72,9 +72,49 @@
       <img src="assets/images/circle-bg-image.png" alt="Image" class="sheet-bg-images circle">
     </section>
   </main>
+  <div class="modal-bg-blur"></div>
+  <form class="modal-sign">
+    <svg width="34" height="34" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg" id="close-sign" tabindex="3">
+      <rect x="24" width="10" height="10" rx="3"/>
+      <rect x="12" y="12" width="10" height="10" rx="3"/>
+      <rect width="10" height="10" rx="3"/>
+      <rect y="24" width="10" height="10" rx="3"/>
+      <rect x="24" y="24" width="10" height="10" rx="3"/>
+    </svg>
+    <div class="switch-layout">
+      <button type="button" class="switch-btn active">Исполнитель</button>
+      <button type="button" class="switch-btn">Заказчик</button>
+    </div>
+    <div class="sign-inputs-layout">
+      <label for="login-input" class="sign-label">Логин</label>
+      <input type="text" placeholder="Логин" class="sign-input" id="login-input">
+      <label for="password-input" class="sign-label">Пароль</label>
+      <input type="password" placeholder="Пароль" class="sign-input" id="password-input">
+    </div>
+    <button type="submit" class="sign-btn">Вход</button>
+  </form>
 </body>
 <script>
 const startSect = $(".start-section");
+const modalSign = $(".modal-sign");
+const modalBgBlur = $(".modal-bg-blur");
+const closeSign = $("#close-sign");
+const switchBtn = $(".switch-btn");
+
+
+
+function eventModalSign(event, type = false){
+  if (event == "open"){
+    modalBgBlur.addClass("active");
+    modalSign.addClass("active");
+    if (type == "customer"){
+
+    }
+  } else {
+    modalBgBlur.removeClass("active");
+    modalSign.removeClass("active");
+  }
+}
 
 
 
@@ -84,6 +124,17 @@ $(window).scroll(() => {
   } else {
     startSect.removeClass("blur");
   }
+})
+
+closeSign.click(() => {
+  eventModalSign("close")
+})
+
+switchBtn.each((index, btn) => {
+  $(btn).click(() => {
+    switchBtn.removeClass("active");
+    $(btn).addClass("active");
+  })
 })
 
 

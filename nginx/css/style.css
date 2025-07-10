@@ -157,6 +157,54 @@ button{
         fill: #111111;
     }
 }
+.modal-bg-blur{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: none;
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+    z-index: 15;
+}
+.modal-bg-blur.active{
+    display: block;
+}
+.modal-sign{
+    width: 600px;
+    height: 600px;
+    box-sizing: border-box;
+    padding: 80px;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, calc(100% + 50px));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+    border-radius: 35px 35px 0 0;
+    background-color: #111111;
+    transition: all .2s;
+    z-index: 20;
+}
+.modal-sign.active{
+    transform: translate(-50%, 0);
+}
+.switch-layout{
+    width: 100%;
+    height: 50px;
+    display: flex;
+    gap: 25px;
+}
+.sign-inputs-layout{
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
 @media (max-width: 1500px) {
     .advantage-layout{
         flex-direction: column;
@@ -260,6 +308,73 @@ button{
         border-radius: 30px;
     }
 }
+.switch-btn{
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px white dashed;
+    border-radius: 15px;
+    background-color: rgba(0, 0, 0, 0);
+    cursor: pointer;
+    transition: all .2s;
+    font-size: 15px;
+    font-family: "Manrope", sans-serif;
+    letter-spacing: 0.05em;
+    color: white;
+    text-transform: uppercase;
+}
+.switch-btn.active{
+    border-style: solid;
+    outline: 2px white solid;
+}
+.sign-btn{
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 20px;
+    background-color: #F1F0F5;
+    font-size: 15px;
+    font-family: "Manrope", sans-serif;
+    letter-spacing: 0.05em;
+    color: black;
+    text-transform: uppercase;
+    transition: all .2s;
+    cursor: pointer;
+}
+.sign-btn:hover{
+    border-radius: 30px;
+}
+
+
+
+.sign-input{
+    width: 100%;
+    height: 60px;
+    box-sizing: border-box;
+    padding-left: 25px;
+    border: 1px white solid;
+    border-radius: 20px;
+    background-color: rgba(0, 0, 0, 0);
+    font-size: 15px;
+    font-family: "Manrope", sans-serif;
+    letter-spacing: 0.05em;
+    color: white;
+}
+.sign-input::placeholder{
+    font-size: 15px;
+    font-family: "Manrope", sans-serif;
+    letter-spacing: 0.05em;
+    color: #BEBEBE;
+}
+.sign-input:focus{
+    outline: 2px white solid;
+}
 
 
 
@@ -280,6 +395,12 @@ button{
 .sheet-h::before{
     content: "Современный и удобный инструментарий\Aдля эффективной организации разметки данных";
     white-space: pre-line;
+}
+.sign-label{
+    margin: 0 0 -10px 10px;
+    font-size: 15px;
+    color: white;
+    text-transform: uppercase;
 }
 @media (max-width: 1000px) {
     .sheet-h{
@@ -319,6 +440,24 @@ button{
 #itmo-firefly{
     width: 100%;
     fill: #111111;
+}
+#close-sign{
+    width: 30px;
+    position: fixed;
+    top: -30px;
+    right: -30px;
+    fill: #F1F0F5;
+    cursor: pointer;
+    transition: all .2s;
+}
+#close-sign:hover{
+    rotate: 90deg;
+    fill: white;
+}
+#close-sign:focus{
+    outline: none;
+    rotate: 90deg;
+    fill: white;
 }
 @media (max-width: 1200px) {
     #start-bg-image{
