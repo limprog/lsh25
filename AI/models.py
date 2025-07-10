@@ -4,8 +4,10 @@ from pydantic import BaseModel
 
 class CreatAiTask(BaseModel):
     task_id: str
+    name: str
     classes: List[str]
     markers: Dict[str, List[str]] | None = None
+    description: str
 
 
 class Update(BaseModel):

@@ -23,7 +23,8 @@ def create_ai_task(task: dict) -> bool:
 
 def get_ai_task(task_id: str):
     temp = table.find_one({'task_id': task_id})
-    if temp is None:
+    print(temp)
+    if not temp:
         return False
     temp["_id"] = str(temp["_id"])
     return temp

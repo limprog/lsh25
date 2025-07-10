@@ -2,7 +2,7 @@ from fastapi import FastAPI, File, Response, Cookie
 from fastapi.responses import JSONResponse
 from database import utils
 from models import CreatAiTask, Update, TaskId, MarkerUpdate, AiRequest
-from ai_fun import markers_analysis
+from ai_fun import markers_analysis, llm_answer, get_ai_markers
 
 
 app = FastAPI()
@@ -58,3 +58,21 @@ def get_markers_answer(task_id: str, text: str):
     result = markers_analysis(task["markers"], text)
     return {"ok": True, "result": result}
 
+
+@app.get("/llm-answer")
+def get_llm_answer(task_id: str, text: str):
+    task = get_ai_task(task_id)
+    if not task:
+        return JSONResponse(content={"ok": False, "mes": "Not task"}, status_code=404)
+
+    result = llm_answer(text, task)
+    return {"ok": True, "result": result}
+
+
+@app.get("/markers-ai")
+def markers_ai(task_id: str):
+    task = utils.get_ai_task(task_id)
+    if not task:
+        return JSONResponse(content={"ok": False, "mes": "Not task"}, status_code=404)
+    result = get_ai_markers(task)
+    return {"ok": True, "result": result}

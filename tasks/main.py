@@ -23,11 +23,14 @@ def create_task(task: Task, userLogin = Cookie(), markers: Dict[str, List[str]] 
         return JSONResponse(content={"answer": "markers error", "ok": False}, status_code=404)
 
     r = requests.post(AI_API + "create-ai-task", json={"task_id": str(answer[2]),
-                                                    "classes": [cl["content"] for cl in task["responseFormat"]], "markers": markers})
+                                                       "classes": [cl["content"] for cl in task["responseFormat"]], "markers": markers,
+                                                       "description": task["description"],
+                                                       "name": task["name"]})
 
     if r.status_code == 200:
         return JSONResponse(content={"answer": answer[1], "id": str(answer[2]), "ok": True}, status_code=201)
-    return JSONResponse(content={"answer": "ai modul is not working",  "id": str(answer[2]), "ok": False})
+    delete_task(answer[2])
+    return JSONResponse(content={"answer": "ai modul is not working", "ok": False})
 
 
 @app.get("/get-tasks")
@@ -88,4 +91,8 @@ def complete_subtask(data: SubtaskСomplite):
     elif answer[0] == 2:
         return JSONResponse(content={"answer": answer[1], "key": answer[2], "ok": False}, status_code=415)
     return JSONResponse(content={"answer": answer[1], "full_complete": answer[2], "ok": True}, status_code=200)
+
+
+
+
 
