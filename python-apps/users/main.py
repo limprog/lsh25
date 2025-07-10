@@ -3,6 +3,7 @@ import bcrypt
 from pydantic import BaseModel
 from datetime import time
 from pymongo import MongoClient
+import os
 
 
 class User(BaseModel):
@@ -14,7 +15,7 @@ class User(BaseModel):
     create_date: time|None = None
 
 
-user_client = MongoClient('url')['tests']
+user_client = MongoClient(os.getenv("MONGO_USERS_URI"))['tests']
 app = FastAPI()
 
 
