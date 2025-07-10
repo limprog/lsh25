@@ -1,4 +1,4 @@
-FROM python:3.9-slim-buster
+FROM python:3.10-slim-buster
 WORKDIR /app
 COPY library.txt .
 RUN pip install --no-cache-dir -r library.txt
