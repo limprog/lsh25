@@ -1,5 +1,4 @@
 FROM nginx:latest
-RUN rm /etc/nginx/html/index.html
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY main.html /usr/share/nginx/html/
 COPY assets /usr/share/nginx/html/assets/
