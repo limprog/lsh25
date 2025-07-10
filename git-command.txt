@@ -21,4 +21,4 @@ git push lsh25_remote vps_server
 
 
 git fetch --all
-git reset --hard origin/vps_server    
+git reset --hard origin/vps_server
