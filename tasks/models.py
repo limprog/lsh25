@@ -18,6 +18,7 @@ class Task(BaseModel):
     subtasks: List[Subtask]
     description: str
     responseFormat: List[ResponseFormat]
+    score: int
 
 
 class SubtaskСomplite(BaseModel):

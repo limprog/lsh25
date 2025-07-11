@@ -162,3 +162,10 @@ def image_save(data: list, name: str) -> list:
 
     return result
 
+
+def update_executor(task_id: str, executor: str) -> tuple:
+    res = work.update_one({"_id": ObjectId(task_id)}, {"$set": {"userLogin": executor}})
+    if res.matched_count == 1:
+        return 0, "Task updated"
+    else:
+        return 1, "Not exist"

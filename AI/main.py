@@ -76,3 +76,14 @@ def markers_ai(task_id: str):
         return JSONResponse(content={"ok": False, "mes": "Not task"}, status_code=404)
     result = get_ai_markers(task)
     return {"ok": True, "result": result}
+
+
+@app.get("/llm-img-answer")
+def get_llm_answer_img(task_id: str, text: str, img_base64: str):
+    task = get_ai_task(task_id)
+    if not task:
+        return JSONResponse(content={"ok": False, "mes": "Not task"}, status_code=404)
+
+    result = llm_img_answer(text, task, img_base64)
+    return {"ok": True, "result": result}
+

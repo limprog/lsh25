@@ -57,6 +57,8 @@ def str_to_markers(text: str) -> str:
     for class_markers in text.split(";"):
         cl, markers = class_markers.split(":")
         result[cl] = markers.split(",")
-
     return result
 
+
+def llm_img_answer(text: str, task: Dict, img) -> str:
+    pass

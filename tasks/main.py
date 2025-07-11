@@ -11,6 +11,12 @@ app = FastAPI()
 AI_API = "http://127.0.0.1:8001/"
 
 
+@app.post("/set-set_cookie")
+def set_set_cookie(res: Response, user: str):
+    res.set_cookie(value=user, key="userLogin")
+    return {"ok": True}
+
+
 @app.post("/create-task")
 def create_task(task: Task, userLogin = Cookie(), markers: Dict[str, List[str]] | None = None):
     answer = untils.create_task(task, userLogin)
@@ -93,6 +99,9 @@ def complete_subtask(data: SubtaskСomplite):
     return JSONResponse(content={"answer": answer[1], "full_complete": answer[2], "ok": True}, status_code=200)
 
 
-
-
-
+@app.patch("/update-task-user")
+def update_executor(task_id: str, userLogin = Cookie()):
+    answer = untils.update_executor(task_id, userLogin)
+    if answer[0] == 1:
+        return JSONResponse(content={"answer": answer[1], "ok": False}, status_code=404)
+    return JSONResponse(content={"answer": answer[1], "ok": True}, status_code=200)
