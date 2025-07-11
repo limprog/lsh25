@@ -97,10 +97,13 @@ button{
     .sheet-section{
         gap: 50px;
     }
-}
-@media (max-width: 1000px) {
     .start-section{
         height: 70vh;
+    }
+}
+@media (max-width: 500px) {
+    .sheet-section{
+        padding: 30px 2.5vw;
     }
 }
 
@@ -173,7 +176,7 @@ button{
 }
 .modal-sign{
     width: 600px;
-    height: 600px;
+    height: auto;
     box-sizing: border-box;
     padding: 80px;
     position: fixed;
@@ -219,10 +222,33 @@ button{
         height: 200px;
     }
 }
+@media (max-width: 700px) {
+    .modal-sign{
+        width: 91vw;
+    }
+}
+@media (max-width: 700px) {
+    .modal-sign{
+        padding: 40px;
+    }
+}
 @media (max-width: 500px) {
     .advantage-block{
+        height: 150px;
+        padding-left: 20px;
         p{
-            font-size: 15px;
+            font-size: 12px;
+        }
+    }
+    .modal-sign{
+        width: 95vw;
+        padding: 20px 10px 20px 10px;
+    }
+}
+@media (max-width: 400px) {
+    .advantage-block{
+        svg{
+            display: none;
         }
     }
 }
@@ -475,11 +501,21 @@ button{
         top: 80px;
     }
 }
-@media (max-width: 1000px) {
+@media (max-width: 700px) {
+    #close-sign{
+        top: -50px;
+        right: 0;
+    }
+}
+@media (max-width: 500px) {
     .sheet-bg-images.watch{
         top: 110px;
     }
     .sheet-bg-images.circle{
         transform: none;
+    }
+    #itmo-firefly{
+        width: 90%;
+        align-self: center;
     }
 }
