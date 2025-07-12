@@ -486,7 +486,7 @@ button{
     cursor: pointer;
     transition: all .2s;
 }
-#menu-btn{
+#menu-btn:hover{
     rotate: 90deg;
 }
 
