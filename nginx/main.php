@@ -1,3 +1,16 @@
+<?php
+session_start();
+
+if (isset($_SESSION["bearerToken"])){
+  $session = true;
+  $bearerToken = $_SESSION["bearerToken"];
+  echo "Сессия активна. $bearerToken";
+} else {
+  $session = false;
+  echo "Сессия неактивна.";
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
