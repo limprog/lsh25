@@ -259,10 +259,16 @@ button{
     #log-icon-check{
         display: block;
     }
+    #log-icon-cross{
+        display: none;
+    }
 }
 .log-modal.cross{
     #log-icon-cross{
         display: block;
+    }
+    #log-icon-check{
+        display: none;
     }
 }
 @media (max-width: 1500px) {

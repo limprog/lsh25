@@ -147,7 +147,7 @@ function eventLogModal(event, type = "check", text = "Сообщение"){
       logModal.removeClass("active");
     }, 2000);
   } else {
-    logModal.removeClass("active check cross");
+    logModal.removeClass("actives");
   }
 }
 
@@ -198,10 +198,10 @@ modalSign.submit(() => {
     error: function(jqXHR, textStatus, errorThrown) {
       if (jqXHR.responseJSON){
         if(jqXHR.status == 400){
-          eventLogModal("open", "croos", "Неправильный логин или пароль.");
+          eventLogModal("open", "cross", "Неправильный логин или пароль.");
         }
       } else {
-        eventLogModal("open", "croos", "Ошибка на сервере.");
+        eventLogModal("open", "cross", "Ошибка на сервере.");
       }
     },
     complete: function() {
