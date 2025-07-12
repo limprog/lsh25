@@ -52,6 +52,9 @@ button{
 
 
 
+.header-login{
+    padding-right: 15px;
+}
 .default-main{
     width: 100%;
     height: auto;
@@ -475,6 +478,11 @@ button{
     .loader{
         display: block;
     }
+}
+#menu-btn{
+    width: 30px;
+    height: 30px;
+    fill: #F1F0F5;
 }
 
 

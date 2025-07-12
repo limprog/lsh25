@@ -19,9 +19,24 @@ if (isset($_COOKIE["bearerToken"])){
   <title>ITMO FireFly</title>
 </head>
 <body>
-  <header> <a href="" id="logo-text">ITMO FireFly</a>
+  <header <?php if ($session){ echo 'class="header-login"'; }?>>
+    <a href="/" id="logo-text">ITMO FireFly</a>
     <div class="header-btn-layout">
-      <button class="header-btn" onclick="eventModalSign('open')">Войти</button>
+      <?php if ($session){ ?>
+        <svg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg" id="menu-btn">
+          <rect y="22.5" width="7.5" height="7.5" rx="3.75"/>
+          <rect x="11.25" y="22.5" width="7.5" height="7.5" rx="3.75"/>
+          <rect x="22.5" y="22.5" width="7.5" height="7.5" rx="3.75"/>
+          <rect x="22.5" y="11.25" width="7.5" height="7.5" rx="3.75"/>
+          <rect x="22.5" width="7.5" height="7.5" rx="3.75"/>
+          <rect x="11.25" width="7.5" height="7.5" rx="3.75"/>
+          <rect width="7.5" height="7.5" rx="3.75"/>
+          <rect y="11.25" width="7.5" height="7.5" rx="3.75"/>
+          <rect x="11.25" y="11.25" width="7.5" height="7.5" rx="3.75"/>
+        </svg>
+      <?php } else { ?>
+        <button class="header-btn" onclick="eventModalSign('open')">Войти</button>
+      <?php } ?>
     </div>
   </header>
   <main class="default-main">
@@ -31,7 +46,7 @@ if (isset($_COOKIE["bearerToken"])){
           <br>и многофункциональная
           <br>платформа разметки</h1>
         <button class="start-btn-login" onclick="eventModalSign('open', 'customer')">
-          <div class="text-btn">Войти как заказчик</div>
+          <div class="text-btn">Войти в кабинет</div>
           <div class="icon-btn">
             <svg viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
               <path d="M14.99 10.01V5.02H5.03V0H24.6V20H19.98V10.01H14.99Z"/>
