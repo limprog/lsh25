@@ -78,25 +78,28 @@ services:
   # Прокси-сервер NGINX, который будет маршрутизировать запросы к вашим Python-серверам.
   # Убедитесь, что рядом есть папка `nginx` с Dockerfile и файлом `nginx.conf`.
   nginx:
-    build: ../nginx # Путь к папке с Dockerfile для сборки образа NGINX
+    build: ../nginx
     container_name: nginx_proxy
     ports:
-     - "80:80"   # Стандартный HTTP порт: для доступа к вашему сайту извне.
-     - "443:443" # Стандартный HTTPS порт: для защищенного доступа (потребует настройки SSL/TLS).
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ../web_app:/usr/share/nginx/html:ro # <--- Монтируем папку с вашими PHP-файлами в Nginx
     depends_on:
-     # NGINX должен запуститься после Python-серверов, чтобы он мог к ним проксировать запросы.
       - python-app-tasks
       - python-app-users
       - php_fpm
     networks:
-     - app_network
+      - app_network
 
   php_fpm:
-    image: php:8.2-fpm # Или нужная вам версия PHP-FPM
+    image: php:8.2-fpm
     volumes:
-      - .:/var/www/html
+      - ../web_app:/var/www/html:rw # <--- Монтируем ту же папку с вашими PHP-файлами в PHP-FPM
     networks:
       - app_network
+
 
 # --- Определение общих ресурсов ---
 
