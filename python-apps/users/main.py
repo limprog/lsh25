@@ -89,7 +89,7 @@ async def login_user(
     result = login(username, password)
 
     if result.get("token"):
-        response.set_cookie(key = "bearerToken", value = result["token"])
+        response.set_cookie(key = "bearerToken", value = result["token"], max_age = 3600)
         response.status_code = status.HTTP_200_OK
         return {
             "ok": True
