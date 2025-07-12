@@ -81,17 +81,20 @@
       <rect y="24" width="10" height="10" rx="3"/>
       <rect x="24" y="24" width="10" height="10" rx="3"/>
     </svg>
-    <div class="switch-layout">
+    <!--<div class="switch-layout">
       <button type="button" class="switch-btn active">Исполнитель</button>
       <button type="button" class="switch-btn">Заказчик</button>
-    </div>
+    </div>-->
     <div class="sign-inputs-layout">
       <label for="login-input" class="sign-label">Логин</label>
-      <input type="text" placeholder="Логин" class="sign-input" id="login-input">
+      <input type="text" placeholder="Логин" class="sign-input" id="login-input" required>
       <label for="password-input" class="sign-label">Пароль</label>
-      <input type="password" placeholder="Пароль" class="sign-input" id="password-input">
+      <input type="password" placeholder="Пароль" class="sign-input" id="password-input" required>
     </div>
-    <button type="submit" class="sign-btn">Вход</button>
+    <button type="submit" class="sign-btn">
+      <p>Вход</p>
+      <span class="loader"></span>
+    </button>
   </form>
 </body>
 <script>
@@ -99,7 +102,9 @@ const startSect = $(".start-section");
 const modalSign = $(".modal-sign");
 const modalBgBlur = $(".modal-bg-blur");
 const closeSign = $("#close-sign");
-const switchBtn = $(".switch-btn");
+//const switchBtn = $(".switch-btn");
+const signForm = $(".modal-sign");
+const signBtn = $(".sign-btn");
 
 
 
@@ -130,11 +135,33 @@ closeSign.click(() => {
   eventModalSign("close")
 })
 
-switchBtn.each((index, btn) => {
+/*switchBtn.each((index, btn) => {
   $(btn).click(() => {
     switchBtn.removeClass("active");
     $(btn).addClass("active");
   })
+})*/
+
+modalSign.submit(() => {
+  event.preventDefault();
+
+  signBtn.prop("disabled", true);
+
+  let data = {
+    username: $(modalSign.find("input")[0]).val(),
+    password: $(modalSign.find("input")[1]).val()
+  }
+
+  $.post("http://89.169.146.136:8765/users/auth", data)
+    .done((data) => {
+      console.log(data);
+    })
+    .fail((jqXHR, textStatus) => {
+      console.log(jqXHR, textStatus);
+    })
+    .always(() => {
+      signBtn.prop("disabled", false);
+    })
 })
 
 

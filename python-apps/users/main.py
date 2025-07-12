@@ -3,7 +3,6 @@ import bcrypt
 from pydantic import BaseModel
 from datetime import time
 from pymongo import MongoClient
-import os
 
 
 class User(BaseModel):
@@ -15,11 +14,11 @@ class User(BaseModel):
     create_date: time|None = None
 
 
-user_client = MongoClient(os.getenv("MONGO_USERS_URI"))['tests']
+user_client = MongoClient('url')['tests']
 app = FastAPI()
 
 
-@app.post('/register')
+@app.post('/api/users/register')
 def registration(new_user: User, response: Response) -> dict:
     try:
         if user_client.find_one({'userLogin': new_user.userLogin}):
@@ -41,7 +40,7 @@ def registration(new_user: User, response: Response) -> dict:
                 'message': 'Ошибка на сервере!'}
     
 
-@app.get('/login')
+@app.get('/api/users/login')
 def authorization(user: User, responce: Response, userLogin: str | None = Cookie(default=None)) -> dict:
     try:
         if userLogin:
@@ -62,7 +61,7 @@ def authorization(user: User, responce: Response, userLogin: str | None = Cookie
                 'message': 'Ошибка на сервере!'}
 
 
-@app.get('/get-users')
+@app.get('/api/users/get-users')
 def get_users():
     users = user_client.find()
     result = []
@@ -72,7 +71,7 @@ def get_users():
     return result
 
 
-@app.get('/get-user-data')
+@app.get('/api/users/get-user-data')
 def get_user_inf(login:str) -> dict:
     user = user_client.find_one({'userLogin': login})
     if user:
@@ -81,7 +80,7 @@ def get_user_inf(login:str) -> dict:
     return {'message': 'Пользователь не найден!'}
 
 
-@app.patch('/edit-password')
+@app.patch('/api/users/edit-password')
 def update_password(login:str, new_pasword:str) -> dict:
     try:
         user = user_client.find_one({'userLogin': login})
