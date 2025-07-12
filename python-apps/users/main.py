@@ -81,7 +81,7 @@ def registration(new_user: User, response: Response) -> dict:
     
 
 @app.post('/api/users/login')
-async def login_user(username, password):
+async def login_user(username: str, password: str) -> dict:
     result = login(username, password)
 
     return result
