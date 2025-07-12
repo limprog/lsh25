@@ -82,10 +82,9 @@ def registration(new_user: User, response: Response) -> dict:
 
 @app.post('/api/users/login')
 async def login_user(
-    # ИСПОЛЬЗУЙТЕ Body(...) ДЛЯ ИЗВЛЕЧЕНИЯ ИЗ JSON-ТЕЛЕ ЗАПРОСА
+    response: Response,
     username: str = Body(..., description="Имя пользователя"),
-    password: str = Body(..., description="Пароль"),
-    response: Response # Добавляем Response для установки куки
+    password: str = Body(..., description="Пароль")
 ) -> dict:
     result = login(username, password)
 
