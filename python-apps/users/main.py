@@ -58,7 +58,7 @@ user_client = MongoClient('url')['tests']
 app = FastAPI()
 
 
-@app.post('/api/users/register')
+@app.post('/register')
 def registration(new_user: User, response: Response) -> dict:
     try:
         if user_client.find_one({'userLogin': new_user.userLogin}):
@@ -80,7 +80,7 @@ def registration(new_user: User, response: Response) -> dict:
                 'message': 'Ошибка на сервере!'}
     
 
-@app.post('/api/users/login')
+@app.post('/login')
 async def login_user(
     response: Response,
     username: str = Body(..., description="Имя пользователя"),
@@ -94,7 +94,7 @@ async def login_user(
     return result
 
 
-@app.get('/api/users/get-users')
+@app.get('/get-users')
 def get_users():
     users = user_client.find()
     result = []
@@ -104,7 +104,7 @@ def get_users():
     return result
 
 
-@app.get('/api/users/get-user-data')
+@app.get('/get-user-data')
 def get_user_inf(login:str) -> dict:
     user = user_client.find_one({'userLogin': login})
     if user:
@@ -113,7 +113,7 @@ def get_user_inf(login:str) -> dict:
     return {'message': 'Пользователь не найден!'}
 
 
-@app.patch('/api/users/edit-password')
+@app.patch('/edit-password')
 def update_password(login:str, new_pasword:str) -> dict:
     try:
         user = user_client.find_one({'userLogin': login})

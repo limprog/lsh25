@@ -152,7 +152,7 @@ modalSign.submit(() => {
     password: $(modalSign.find("input")[1]).val()
   }
 
-  $.post("http://89.169.146.136:8765/users/auth", data)
+  $.post("/api/users/login", data)
     .done((data) => {
       console.log(data);
     })
