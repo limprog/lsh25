@@ -87,8 +87,14 @@ services:
      # NGINX должен запуститься после Python-серверов, чтобы он мог к ним проксировать запросы.
       - python-app-tasks
       - python-app-users
+      - php_fpm
     networks:
      - app_network
+    php_fpm:
+      image: php:8.2-fpm # Или другая версия PHP, например 7.4-fpm, 8.1-fpm
+      volumes:
+       - ./php-app:/var/www/html # Важно: монтируем папку с PHP файлами в контейнер PHP-FPM
+    # command: php-fpm # Обычно образ уже настроен на запуск FPM по умолчанию
 
 # --- Определение общих ресурсов ---
 
