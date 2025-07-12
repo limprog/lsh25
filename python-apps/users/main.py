@@ -89,7 +89,7 @@ async def login_user(
     result = login(username, password)
 
     if result.get("token"):
-        response.set_cookie(key = "BearerToken", value = result.token)
+        response.set_cookie(key = "BearerToken", value = result["token"])
 
     return result
 
