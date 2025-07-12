@@ -94,7 +94,7 @@ services:
   php_fpm:
     image: php:8.2-fpm # Или нужная вам версия PHP-FPM
     volumes:
-      - ./pages:/var/www/html
+      - .:/var/www/html
     networks:
       - app_network
 
