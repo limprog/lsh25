@@ -78,14 +78,20 @@ services:
   # Прокси-сервер NGINX, который будет маршрутизировать запросы к вашим Python-серверам.
   # Убедитесь, что рядом есть папка `nginx` с Dockerfile и файлом `nginx.conf`.
   nginx:
-    build: ../nginx
+    build: ../nginx # Nginx Dockerfile находится в /lsh25/nginx/
     container_name: nginx_proxy
     ports:
       - "80:80"
       - "443:443"
     volumes:
+      # Монтируем файл nginx.conf с хоста в контейнер.
+      # Путь на хосте: /lsh25/yaml/nginx/nginx.conf
+      # Путь в контейнере: /etc/nginx/nginx.conf
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ../web_app:/usr/share/nginx/html:ro # <--- Монтируем папку с вашими PHP-файлами в Nginx
+      # Монтируем корневой каталог вашего веб-приложения с хоста в контейнер Nginx.
+      # Путь на хосте: /lsh25/nginx/ (потому что `build: ../nginx` - это контекст)
+      # Путь в контейнере: /var/www/html
+      - ../nginx:/var/www/html:ro # <--- Здесь ваши PHP, HTML, CSS, JS файлы
     depends_on:
       - python-app-tasks
       - python-app-users
@@ -96,7 +102,10 @@ services:
   php_fpm:
     image: php:8.2-fpm
     volumes:
-      - ../web_app:/var/www/html:rw # <--- Монтируем ту же папку с вашими PHP-файлами в PHP-FPM
+      # Монтируем тот же корневой каталог веб-приложения с хоста в контейнер PHP-FPM.
+      # Путь на хосте: /lsh25/nginx/
+      # Путь в контейнере: /var/www/html
+      - ../nginx:/var/www/html:rw # <--- Должен быть тот же путь, что и для Nginx
     networks:
       - app_network
 
