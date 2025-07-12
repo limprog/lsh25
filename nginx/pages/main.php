@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+echo $_SESSION["bearerToken"];
 if (isset($_SESSION["bearerToken"])){
   $session = true;
   $bearerToken = $_SESSION["bearerToken"];
