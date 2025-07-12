@@ -228,7 +228,6 @@ button{
         width: 40px;
         aspect-ratio: 1/1;
         box-sizing: border-box;
-        padding: 2px 0 0 1px;
         display: flex;
         justify-content: center;
         align-items: center;

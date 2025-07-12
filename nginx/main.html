@@ -147,7 +147,9 @@ function eventLogModal(event, type = "check", text = "Сообщение"){
       logModal.removeClass("active");
     }, 2000);
   } else {
-    logModal.removeClass("actives");
+    logModal.removeClass("active");
+    logModal.removeClass("check");
+    logModal.removeClass("cross");
   }
 }
 
