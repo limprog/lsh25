@@ -92,6 +92,9 @@ services:
       # Путь на хосте: /lsh25/nginx/ (потому что `build: ../nginx` - это контекст)
       # Путь в контейнере: /var/www/html
       - ../nginx/pages:/var/www/html:ro # <--- Здесь ваши PHP, HTML, CSS, JS файлы
+      - ../nginx/assets:/var/www/html/assets:ro
+      - ../nginx/css:/var/www/html/css:ro
+      - ../nginx/js:/var/www/html/js:ro
     depends_on:
       - python-app-tasks
       - python-app-users
