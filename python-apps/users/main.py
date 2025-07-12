@@ -3,6 +3,46 @@ import bcrypt
 from pydantic import BaseModel
 from datetime import time
 from pymongo import MongoClient
+import requests
+import json
+
+
+
+def login(username: str, password: str) -> dict:
+    endpoint_url = "http://89.169.146.136:8765/users/auth"
+
+    reqData = {
+        "username": username,
+        "password": password
+    }
+
+    try:
+        # Отправляем POST-запрос на внешний эндпоинт
+        # Заголовок Content-Type: application/json указывает, что тело запроса - JSON
+        response = requests.post(endpoint_url, json=reqData)
+
+        # Проверяем, был ли запрос успешным (статус 2xx)
+        response.raise_for_status()
+
+        # Возвращаем JSON-ответ от эндпоинта
+        return response.json()
+
+    except requests.exceptions.HTTPError as http_err:
+        # Обработка ошибок HTTP (например, 404, 500)
+        return {"ok": False, "message": f"Ошибка HTTP: {http_err}", "details": response.text}
+    except requests.exceptions.ConnectionError as conn_err:
+        # Обработка ошибок подключения (например, сервер недоступен)
+        return {"ok": False, "message": f"Ошибка подключения: {conn_err}"}
+    except requests.exceptions.Timeout as timeout_err:
+        # Обработка ошибок тайм-аута
+        return {"ok": False, "message": f"Ошибка тайм-аута: {timeout_err}"}
+    except requests.exceptions.RequestException as req_err:
+        # Обработка любых других ошибок запроса
+        return {"ok": False, "message": f"Произошла ошибка: {req_err}"}
+    except json.JSONDecodeError:
+        # Обработка случая, когда ответ не является валидным JSON
+        return {"ok": False, "message": "Не удалось декодировать JSON из ответа", "raw_response": response.text}
+
 
 
 class User(BaseModel):
@@ -40,25 +80,11 @@ def registration(new_user: User, response: Response) -> dict:
                 'message': 'Ошибка на сервере!'}
     
 
-@app.get('/api/users/login')
-def authorization(user: User, responce: Response, userLogin: str | None = Cookie(default=None)) -> dict:
-    try:
-        if userLogin:
-            orig_user = user_client.find_one({'userLogin': userLogin})
-        else:
-            orig_user = user_client.find_one({'userLogin': user.userLogin})
-        if orig_user:
-            if bcrypt.checkpw(user.password.encode('utf-8'), orig_user[password]):
-                response.set_cookie(key="userLogin", value=orig_user.userLogin)
-                return {'ok': True,
-                        'message:': 'Успешная авторизация!'}
-            return {'ok': False,
-                    'message': 'Неверный пароль!'}
-        return {'ok:': False,
-                'message': 'Несуществующий пользователь!'}
-    except:
-        return {'ok': False,
-                'message': 'Ошибка на сервере!'}
+@app.post('/api/users/login')
+async def login_user(username, password):
+    result = login(username, password)
+
+    return result
 
 
 @app.get('/api/users/get-users')
