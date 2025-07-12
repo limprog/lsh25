@@ -104,11 +104,7 @@ services:
 
   php_fpm:
     image: php:8.2-fpm
-    volumes:
-      # Монтируем тот же корневой каталог веб-приложения с хоста в контейнер PHP-FPM.
-      # Путь на хосте: /lsh25/nginx/
-      # Путь в контейнере: /var/www/html
-      - ../nginx:/var/www/html:rw # <--- Должен быть тот же путь, что и для Nginx
+      - ../nginx/pages:/var/www/html:rw
     networks:
       - app_network
 
