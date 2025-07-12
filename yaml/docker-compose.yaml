@@ -87,14 +87,14 @@ services:
       # Монтируем файл nginx.conf с хоста в контейнер.
       # Путь на хосте: /lsh25/yaml/nginx/nginx.conf
       # Путь в контейнере: /etc/nginx/nginx.conf
-      - ../nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ../nginx/nginx.conf:/etc/nginx/nginx.conf:rw
       # Монтируем корневой каталог вашего веб-приложения с хоста в контейнер Nginx.
       # Путь на хосте: /lsh25/nginx/ (потому что `build: ../nginx` - это контекст)
       # Путь в контейнере: /var/www/html
-      - ../nginx/pages:/var/www/html:ro
-      - ../nginx/assets:/var/www/html/assets:ro
-      - ../nginx/css:/var/www/html/css:ro
-      - ../nginx/js:/var/www/html/js:ro
+      - ../nginx/pages:/var/www/html:rw
+      - ../nginx/assets:/var/www/html/assets:rw
+      - ../nginx/css:/var/www/html/css:rw
+      - ../nginx/js:/var/www/html/js:rw
     depends_on:
       - python-app-tasks
       - python-app-users
