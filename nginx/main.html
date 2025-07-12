@@ -136,6 +136,7 @@ function eventModalSign(event, type = false){
 
 function eventLogModal(event, type = "check", text = "Сообщение"){
   if (event == "open"){
+    logModal.removeClass("check cross");
     logMessage.text(text)
     if (type == "check"){
       logModal.addClass("check");
@@ -148,8 +149,6 @@ function eventLogModal(event, type = "check", text = "Сообщение"){
     }, 2000);
   } else {
     logModal.removeClass("active");
-    logModal.removeClass("check");
-    logModal.removeClass("cross");
   }
 }
 
