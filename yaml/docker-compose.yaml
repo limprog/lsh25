@@ -91,7 +91,7 @@ services:
       # Монтируем корневой каталог вашего веб-приложения с хоста в контейнер Nginx.
       # Путь на хосте: /lsh25/nginx/ (потому что `build: ../nginx` - это контекст)
       # Путь в контейнере: /var/www/html
-      - ../nginx:/var/www/html:ro # <--- Здесь ваши PHP, HTML, CSS, JS файлы
+      - ../nginx/pages:/var/www/html:ro # <--- Здесь ваши PHP, HTML, CSS, JS файлы
     depends_on:
       - python-app-tasks
       - python-app-users
