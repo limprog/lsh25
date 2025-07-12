@@ -88,6 +88,9 @@ async def login_user(
 ) -> dict:
     result = login(username, password)
 
+    if result.token:
+        response.set_cookie(key = "BearerToken", value = result.token)
+
     return result
 
 
