@@ -483,6 +483,11 @@ button{
     width: 30px;
     height: 30px;
     fill: #F1F0F5;
+    cursor: pointer;
+    transition: all .2s;
+}
+#menu-btn{
+    rotate: 90deg;
 }
 
 
