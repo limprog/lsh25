@@ -138,9 +138,9 @@ function eventLogModal(event, type = "check", text = "Сообщение"){
   if (event == "open"){
     logMessage.text(text)
     if (type == "check"){
-      logMessage.addClass("check");
+      logModal.addClass("check");
     } else {
-      logMessage.addClass("cross");
+      logModal.addClass("cross");
     }
     logModal.addClass("active");
     setTimeout(() => {
