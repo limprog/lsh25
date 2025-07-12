@@ -208,6 +208,63 @@ button{
     flex-direction: column;
     gap: 25px;
 }
+.log-modal{
+    width: 600px;
+    height: 50px;
+    box-sizing: border-box;
+    padding: 0 25px 0 5px;
+    position: fixed;
+    top: 25px;
+    left: 50%;
+    transform: translate(-50%, calc(-100% - 50px));
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-radius: 25px;
+    background-color: #F1F0F5;
+    z-index: 15;
+    transition: all .2s;
+    .log-icon{
+        width: 40px;
+        aspect-ratio: 1/1;
+        box-sizing: border-box;
+        padding: 2px 0 0 1px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        background-color: #111111;
+        svg{
+            display: none;
+            fill: #F1F0F5;
+        }
+        #log-icon-check{
+            width: 20px;
+            height: 20px;
+        }
+        #log-icon-croos{
+            width: 15px;
+            height: 15px;
+        }
+    }
+    .log-message{
+        font-size: 15px;
+        color: black;
+    }
+}
+.log-modal.active{
+    transform: translate(-50%, 0);
+}
+.log-modal.check{
+    #log-icon-check{
+        display: block;
+    }
+}
+.log-modal.cross{
+    #log-icon-cross{
+        display: block;
+    }
+}
 @media (max-width: 1500px) {
     .advantage-layout{
         flex-direction: column;
@@ -225,6 +282,9 @@ button{
 @media (max-width: 700px) {
     .modal-sign{
         width: 91vw;
+    }
+    .log-modal{
+        width: 95vw;
     }
 }
 @media (max-width: 700px) {

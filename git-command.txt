@@ -23,3 +23,6 @@ git push lsh25_remote vps_server
 cd /lsh25
 git fetch --all
 git reset --hard origin/vps_server
+cd /lsh25/yaml
+docker compose down # Остановит и удалит все контейнеры, сети и тома (если они не именованы явно, как у вас)
+docker compose up -d --build # Пересобирает образы и запускает все заново
