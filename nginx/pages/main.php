@@ -4,10 +4,8 @@ session_start();
 if (isset($_COOKIE["bearerToken"])){
   $session = true;
   $bearerToken = $_COOKIE["bearerToken"];
-  echo "Сессия активна. $bearerToken";
 } else {
   $session = false;
-  echo "Сессия неактивна.";
 }
 
 ?>
