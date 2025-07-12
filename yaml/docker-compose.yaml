@@ -104,6 +104,7 @@ services:
 
   php_fpm:
     image: php:8.2-fpm
+    volumes:
       - ../nginx/pages:/var/www/html:rw
     networks:
       - app_network
