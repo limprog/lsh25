@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Response, Cookie, Body
+from fastapi import FastAPI, Response, Cookie, Body, status, HTTPException
 import bcrypt
 from pydantic import BaseModel
 from datetime import time
@@ -90,8 +90,15 @@ async def login_user(
 
     if result.get("token"):
         response.set_cookie(key = "BearerToken", value = result["token"])
-
-    return result
+        response.status_code = status.HTTP_200_OK
+        return {
+            "ok": True
+        }
+    else:
+        response.status_code = status.HTTP_400_BAD_REQUEST
+        return {
+            "ok": False
+        }
 
 
 @app.get('/get-users')
