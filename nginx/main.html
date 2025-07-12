@@ -152,16 +152,24 @@ modalSign.submit(() => {
     password: $(modalSign.find("input")[1]).val()
   }
 
-  $.post("/api/users/login", data)
-    .done((data) => {
-      console.log(data);
-    })
-    .fail((jqXHR, textStatus) => {
-      console.log(jqXHR, textStatus);
-    })
-    .always(() => {
+  $.ajax({
+    url: "/api/users/login",
+    type: "POST",
+    contentType: "application/json",
+    dataType: "json",
+    data: stringify(data),
+
+    success: (response) => {
+      console.log(response);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.error("Ошибка при отправке POST-запроса:", textStatus, errorThrown);
+      console.error("Ответ сервера (jqXHR.responseText):", jqXHR.responseText);
+    },
+    complete: function() {
       signBtn.prop("disabled", false);
-    })
+    }
+  });
 })
 
 
