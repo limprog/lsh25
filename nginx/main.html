@@ -157,7 +157,7 @@ modalSign.submit(() => {
     type: "POST",
     contentType: "application/json",
     dataType: "json",
-    data: stringify(data),
+    data: JSON.stringify(data),
 
     success: (response) => {
       console.log(response);
