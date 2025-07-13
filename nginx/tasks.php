@@ -94,10 +94,13 @@ if (curl_error($ch)){
     
     for (i = 0; i < quanitySubtasks; i++){
       let selectRadio = $(`input[name=${index}${i}]:checked`);
+      console.log(i);
 
       if (!selectRadio.length){
         continue;
       }
+
+      console.log(i);
 
       requireSubstacks.push({
         [i]: selectRadio.val()
