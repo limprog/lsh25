@@ -112,7 +112,8 @@
           name: $('#taskName').val(),
           description: $('#taskDescription').val(),
           subtasks: [],
-          responseFormat: []
+          responseFormat: [],
+          score: 0
         };
 
         // Сбор подзадач
