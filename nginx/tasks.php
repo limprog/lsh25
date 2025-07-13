@@ -99,9 +99,7 @@ if (curl_error($ch)){
         continue;
       }
 
-      requireSubstacks.push({
-        [i]: selectRadio.val()
-      })
+      requireSubstacks.push([i]: selectRadio.val());
     }
 
     if (!requireSubstacks.length){
