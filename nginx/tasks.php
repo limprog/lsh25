@@ -41,10 +41,13 @@ if (curl_error($ch)){
         <h2 class="title-task"><?php echo $task["name"] ?></h2>
         <p class="description-task"><?php echo $task["description"] ?></p>
         <div class="subtask-layout">
-          <?php foreach ($task["subtasks"] as $subtask){ ?>
+          <?php foreach ($task["subtasks"] as $subtask){
+            if ($subtask["content"]){
+              continue;
+            }
+            ?>
             <hr>
             <p><?php echo $subtask["description"] ?></p>
-            <?php } ?>
             <div class="task-response-layout">
               <?php foreach ($task["responseFormat"] as $radio){ ?>
               <div class="radio-layout">
@@ -53,29 +56,33 @@ if (curl_error($ch)){
               </div>
               <?php } ?>
             </div>
+            <?php } ?>
         </div>
         <p class="status-task"><?php echo $task["responseCount"] ?></p>
         <div class="task-event-layout">
           <button class="task-detailed-btn">Подробнее</button>
+          <button class="task-save-btn">Сохранить</button>
         </div>
       </div>
     <?php }} ?>
-
   </main>
 </body>
 <script src="js/header.js"></script>
 <script>
   const taskLayout = $(".task-layout");
   const detailedBtn = $(".task-detailed-btn");
+  const saveBtn = $(".task-save-btn");
 
 
 
   function eventDetailedTask(index){
     if (!$(taskLayout[index]).hasClass("active")){
       $(taskLayout[index]).addClass("active");
+      $(saveBtn[index]).addClass("active");
       $(detailedBtn[index]).text("Скрыть");
     } else {
       $(taskLayout[index]).removeClass("active");
+      $(saveBtn[index]).removeClass("active");
       $(detailedBtn[index]).text("Подробнее");
     }
   }
