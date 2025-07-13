@@ -155,6 +155,7 @@ body{
     gap: 10px;
     border: none;
     background-color: transparent;
+    cursor: pointer;
     .create-task-text{
         width: auto;
         height: 50px;
@@ -178,9 +179,15 @@ body{
         justify-content: center;
         align-items: center;
         border: 1px #F1F0F5 solid;
+        border-radius: 15px;
         svg{
             fill: #F1F0F5;
         }
+    }
+}
+.create-task-btn:hover{
+    .create-task-text{
+        border-radius: 25px;
     }
 }
 
