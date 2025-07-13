@@ -88,7 +88,7 @@ if (curl_error($ch)){
   }
 
   function completeTask(index){
-    let quanitySubtasks = (int)($(saveBtn[index]).data("quanity-subtask"));
+    let quanitySubtasks = parseInt($(saveBtn[index]).data("quanity-subtask"));
     
     
     for (i = 0; i < quanitySubtasks; i++){
