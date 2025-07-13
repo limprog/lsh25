@@ -85,11 +85,9 @@ if (curl_error($ch)){
   function eventDetailedTask(index){
     if (!$(taskLayout[index]).hasClass("active")){
       $(taskLayout[index]).addClass("active");
-      $(saveBtn[index]).addClass("active");
       $(detailedBtn[index]).text("Скрыть");
     } else {
       $(taskLayout[index]).removeClass("active");
-      $(saveBtn[index]).removeClass("active");
       $(detailedBtn[index]).text("Подробнее");
     }
   }
@@ -119,7 +117,7 @@ if (curl_error($ch)){
         eventLogModal("open", "cross", "Ошибка на сервере.");
       },
       complete: function() {
-        $(saveBtn[index]).removeClass("disabled");
+        $(saveBtn[index]).prop("disabled", false);
       }
     });
   }
