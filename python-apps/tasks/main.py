@@ -8,7 +8,7 @@ import requests
 
 
 app = FastAPI()
-AI_API = "http://127.0.0.1:8001/"
+AI_API = "http://94.228.123.138:8001/"
 
 
 @app.post("/set-set_cookie")
