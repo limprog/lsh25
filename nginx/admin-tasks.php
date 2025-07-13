@@ -103,9 +103,9 @@ if (curl_error($ch)){
     $.ajax({
       url: "/api/tasks/delete-task",
       type: "DELETE",
-      contentType: "application/json",
+      contentType: "application/x-www-form-urlencoded; charset=UTF-8",
       dataType: "json",
-      data: JSON.stringify(data),
+      data: data,
 
       success: (response) => {
         eventLogModal("open", "check", "Задание удалено.");
