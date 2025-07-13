@@ -104,6 +104,7 @@ if (curl_error($ch)){
       console.log(i);
 
       if (!selectRadio.length){
+        alert($(`.res-input[name=${index}${i}]`).val());
         continue;
       }
 
@@ -111,8 +112,6 @@ if (curl_error($ch)){
     }
 
     if (!Object.keys(requireSubstacks).length){
-      alert($(`.res-input[name=${index}${i}]`).val());
-
       eventLogModal("open", "cross", "Выделите ответы.");
       return;
     }
