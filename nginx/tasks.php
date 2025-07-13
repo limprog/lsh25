@@ -44,15 +44,15 @@ if (curl_error($ch)){
           <?php foreach ($task["subtasks"] as $subtask){ ?>
             <hr>
             <p><?php echo $subtask["description"] ?></p>
-          </div>
-          <?php } ?>
-        <div class="task-response-layout">
-          <?php foreach ($task["responseFormat"] as $radio){ ?>
-          <div class="radio-layout">
-            <input type="radio" value="<?php echo $radio["content"] ?>" disabled>
-            <label><?php echo $radio["content"] ?></label>
-          </div>
-          <?php } ?>
+            <?php } ?>
+            <div class="task-response-layout">
+              <?php foreach ($task["responseFormat"] as $radio){ ?>
+              <div class="radio-layout">
+                <input type="radio" value="<?php echo $radio["content"] ?>" disabled>
+                <label><?php echo $radio["content"] ?></label>
+              </div>
+              <?php } ?>
+            </div>
         </div>
         <p class="status-task"><?php echo $task["responseCount"] ?></p>
         <div class="task-event-layout">
