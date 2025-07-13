@@ -116,32 +116,27 @@ if (curl_error($ch)){
 
     console.log(data);
 
-    /*$.ajax({
-      url: "/api/users/login",
-      type: "POST",
+    $.ajax({
+      url: "/api/tasks/complete-subtask",
+      type: "put",
       contentType: "application/json",
       dataType: "json",
       data: JSON.stringify(data),
 
       success: (response) => {
-        eventLogModal("open", "check", "Вы успешно вошли!");
-        setTimeout(() => {
+        eventLogModal("open", "check", "Задание сохранено!");
+        console.log(response);
+        /*setTimeout(() => {
           location.reload();
-        }, 2000);
+        }, 2000);*/
       },
       error: function(jqXHR, textStatus, errorThrown) {
-        if (jqXHR.responseJSON){
-          if(jqXHR.status == 400){
-            eventLogModal("open", "cross", "Неправильный логин или пароль.");
-          }
-        } else {
-          eventLogModal("open", "cross", "Ошибка на сервере.");
-        }
+        eventLogModal("open", "cross", "Ошибка на сервере.");
       },
       complete: function() {
         signBtn.prop("disabled", false);
       }
-    });*/
+    });
   }
 
 
