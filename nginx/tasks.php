@@ -10,7 +10,7 @@ if (isset($_COOKIE["bearerToken"])){
   exit;
 }
 
-$userTasks = file_get_contents("/api/users/get-user-tasks");
+$userTasks = file_get_contents("/api/tasks/get-user-tasks");
 
 if ($userTasks === false){
   $userTasks = false;
