@@ -12,6 +12,11 @@ body{
     flex-direction: column;
     gap: 50px;
 }
+@media (max-width: 1100px) {
+    .tasks-main{
+        width: 91vw;
+    }
+}
 
 
 
