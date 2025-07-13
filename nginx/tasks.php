@@ -37,7 +37,7 @@ if (curl_error($ch)){
   <?php include("header.php") ?>
   <main class="tasks-main">
     <?php if ($userTasks !== false){ foreach ($userTasks as $taskKey => $task){ ?>
-      <div class="task-layout" data-task_id="<?php echo $task['_id']['$oid'] ?>">
+      <div class="task-layout" >
         <h2 class="title-task"><?php echo $task["name"] ?></h2>
         <p class="description-task"><?php echo $task["description"] ?></p>
         <div class="subtask-layout">
