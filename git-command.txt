@@ -26,5 +26,3 @@ git reset --hard origin/vps_server
 cd /lsh25/yaml
 docker compose down # Остановит и удалит все контейнеры, сети и тома (если они не именованы явно, как у вас)
 docker compose up -d --build # Пересобирает образы и запускает все заново
-
-data-task_id="<?php echo $task['_id']['$oid'] ?>"

@@ -20,6 +20,8 @@ if (curl_error($ch)){
   $userTasks = false;
 } else {
   $userTasks = json_decode($userTasks, true);
+  echo json_encode($userTasks[0]);
+  echo json_encode($userTasks[0]['_id']['$oid']);
 }
 
 ?>
@@ -37,7 +39,7 @@ if (curl_error($ch)){
   <?php include("header.php") ?>
   <main class="tasks-main">
     <?php if ($userTasks !== false){ foreach ($userTasks as $taskKey => $task){ ?>
-      <div class="task-layout" >
+      <div class="task-layout" data-task_id="<?php echo $task['_id']['$oid'] ?>">
         <h2 class="title-task"><?php echo $task["name"] ?></h2>
         <p class="description-task"><?php echo $task["description"] ?></p>
         <div class="subtask-layout">
@@ -91,7 +93,6 @@ if (curl_error($ch)){
     let quanitySubtasks = parseInt($(saveBtn[index]).data("quanity-subtask"));
     let requireSubstacks = [];
     
-    
     for (i = 0; i < quanitySubtasks; i++){
       let selectRadio = $(`input[name=${index}${i}]:checked`);
       console.log(i);
@@ -99,8 +100,6 @@ if (curl_error($ch)){
       if (!selectRadio.length){
         continue;
       }
-
-      console.log(i);
 
       requireSubstacks.push({
         [i]: selectRadio.val()
