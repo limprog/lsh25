@@ -37,7 +37,7 @@ if (curl_error($ch)){
   <?php include("header.php") ?>
   <main class="tasks-main">
     <?php if ($userTasks !== false){ foreach ($userTasks as $taskKey => $task){ ?>
-      <div class="task-layout">
+      <div class="task-layout" data-task_id="<?php echo $task['_id']['$oid'] ?>">
         <h2 class="title-task"><?php echo $task["name"] ?></h2>
         <p class="description-task"><?php echo $task["description"] ?></p>
         <div class="subtask-layout">
@@ -89,6 +89,7 @@ if (curl_error($ch)){
 
   function completeTask(index){
     let quanitySubtasks = parseInt($(saveBtn[index]).data("quanity-subtask"));
+    let requireSubstacks = [];
     
     
     for (i = 0; i < quanitySubtasks; i++){
@@ -98,8 +99,49 @@ if (curl_error($ch)){
         continue;
       }
 
-      alert(selectRadio.val())
+      requireSubstacks.push({
+        [i]: selectRadio.val()
+      })
     }
+
+    if (!requireSubstacks.length){
+      eventLogModal9("open", "cross", "Выделите ответы.");
+      return;
+    }
+
+    let data = {
+      task_id: $(taskLayout[index].data("task_id")),
+      responseAnswer: requireSubstacks
+    };
+
+    console.log(data);
+
+    /*$.ajax({
+      url: "/api/users/login",
+      type: "POST",
+      contentType: "application/json",
+      dataType: "json",
+      data: JSON.stringify(data),
+
+      success: (response) => {
+        eventLogModal("open", "check", "Вы успешно вошли!");
+        setTimeout(() => {
+          location.reload();
+        }, 2000);
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        if (jqXHR.responseJSON){
+          if(jqXHR.status == 400){
+            eventLogModal("open", "cross", "Неправильный логин или пароль.");
+          }
+        } else {
+          eventLogModal("open", "cross", "Ошибка на сервере.");
+        }
+      },
+      complete: function() {
+        signBtn.prop("disabled", false);
+      }
+    });*/
   }
 
 
