@@ -102,7 +102,7 @@ if (curl_error($ch)){
       requireSubstacks[i] = selectRadio.val();
     }
 
-    if (!requireSubstacks.length){
+    if (!Object.keys(requireSubstacks).length){
       eventLogModal("open", "cross", "Выделите ответы.");
       return;
     }
