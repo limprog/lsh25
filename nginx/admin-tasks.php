@@ -65,7 +65,8 @@ if (curl_error($ch)){
             </div>
             <?php } ?>
         </div>
-        <p class="status-task"><?php echo $task["responseCount"] ?></p>
+        <p class="status-task">Исполнитель <?php echo $task["userLogin"] ?></p>
+        <p class="status-task">Выполнено <?php echo $task["responseCount"] ?></p>
         <div class="task-event-layout">
           <button class="task-detailed-btn">Подробнее</button>
           <button class="task-delete-btn">Удалить</button>
@@ -99,7 +100,7 @@ if (curl_error($ch)){
     $.ajax({
       url: `/api/tasks/delete-task?id=${$(taskLayout[index]).data("task_id")}`,
       type: "DELETE",
-      
+
       success: (response) => {
         eventLogModal("open", "check", "Задание удалено.");
         setTimeout(() => {
