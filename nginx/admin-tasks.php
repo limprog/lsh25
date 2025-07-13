@@ -97,7 +97,7 @@ if (curl_error($ch)){
     $(deleteBtn[index]).prop("disabled", true);
   
     let data = {
-      task_id: $(taskLayout[index]).data("task_id")
+      id: $(taskLayout[index]).data("task_id")
     };
 
     $.ajax({
