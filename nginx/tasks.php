@@ -105,7 +105,7 @@ if (curl_error($ch)){
 
       if (!selectRadio.length){
         let input = $(`.res-input[name=${index}${i}]`).val();
-        if (!input){
+        if (input){
           requireSubstacks[i] = input;
         }
         continue;
