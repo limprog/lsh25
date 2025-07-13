@@ -89,7 +89,7 @@ if (curl_error($ch)){
 
   function completeTask(index){
     let quanitySubtasks = parseInt($(saveBtn[index]).data("quanity-subtask"));
-    let requireSubstacks = [];
+    let requireSubstacks = {};
     
     for (i = 0; i < quanitySubtasks; i++){
       let selectRadio = $(`input[name=${index}${i}]:checked`);
@@ -99,7 +99,7 @@ if (curl_error($ch)){
         continue;
       }
 
-      requireSubstacks.push([i]: selectRadio.val());
+      requireSubstacks[i] = selectRadio.val();
     }
 
     if (!requireSubstacks.length){
@@ -111,8 +111,6 @@ if (curl_error($ch)){
       task_id: $(taskLayout[index]).data("task_id"),
       responseAnswer: requireSubstacks
     };
-
-    console.log(data);
 
     $.ajax({
       url: "/api/tasks/complete-subtask",
