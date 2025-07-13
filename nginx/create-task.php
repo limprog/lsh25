@@ -71,6 +71,7 @@ if (isset($_COOKIE["bearerToken"])){
     <button type="submit" class="add-item-btn">Создать задание</button>
   </main>
 
+  <script src="header.js"></script>
   <script>
     $(document).ready(function() {
       // Добавление подзадачи
