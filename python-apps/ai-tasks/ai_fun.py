@@ -12,7 +12,7 @@ client = OpenAI(
     base_url="https://api.proxyapi.ru/openai/v1")
 
 
-def markers_analysis(markers: Dict[str, List[str]], text) -> str:
+def markers_analysis(markers: Dict[str, List[str]], text: str) -> str:
     text = text.lower()
     score_dict = dict.fromkeys(markers, 0)
     print(markers)
@@ -32,27 +32,31 @@ def lemmatize(text: str) -> str:
 
 
 def llm_answer(text: str, task: Dict) -> str:
-    answer = client.responses.create(model="gpt-4.1-nano", input=f"У меня есть задача с названием: '{task['name']}' \n"
-                                                                 f"У нее такое описание : '{task['description']}' \nТебе необходимо проанализировать сообщение "
-                                                                 f"ниже и отнести его к одному из классов: {task["classes"]}, \n"
-                                                                 f"Тебе дано следующее сообщение: '{text}' \n"
-                                                                 f"тебе нужно ответить только классом из списка выше. НИКАКИХ РАЗМЫШЛЕНИЙ И ДОВОДОВ.")
-
+    answer = client.responses.create(
+        model="gpt-4.1-nano",
+        input=f"У меня есть задача с названием: '{task['name']}' \n"
+              f"У нее такое описание : '{task['description']}' \nТебе необходимо проанализировать сообщение "
+              f"ниже и отнести его к одному из классов: {task['classes']}, \n"
+              f"Тебе дано следующее сообщение: '{text}' \n"
+              f"тебе нужно ответить только классом из списка выше. НИКАКИХ РАЗМЫШЛЕНИЙ И ДОВОДОВ."
+    )
     return answer.output_text
 
 
 def get_ai_markers(task: Dict) -> Dict[str, List[str]]:
-    answer = client.responses.create(model="gpt-4.1-nano", input=f'Мне нужно чтобы ты помог мне решить задачу. У меня есть задача с названием {task["name"]}. '
-                                                                 f'У нее такое описание:  {task["description"]} Существуют следующие классы: {task["classes"]}'
-                                                                 f'Тебе нужно определить слова маркеры в текстах, с помощью  которых текст на русском можно '
-                                                                 f'отнести к какому-то из классов, на каждый класс придумай 5 маркеров. Ты должен вывести ответ в такой форме '
-                                                                 f'class1:marker1_class1,marker2_class2;class2:marker1_class2 и так далее'
-                                                                 f'В выводе ты должен написать только так, без размышлений и доводов ответ должен быть одной строчко')
-
+    answer = client.responses.create(
+        model="gpt-4.1-nano",
+        input=f'Мне нужно чтобы ты помог мне решить задачу. У меня есть задача с названием {task["name"]}. '
+              f'У нее такое описание:  {task["description"]} Существуют следующие классы: {task["classes"]}'
+              f'Тебе нужно определить слова маркеры в текстах, с помощью  которых текст на русском можно '
+              f'отнести к какому-то из классов, на каждый класс придумай 5 маркеров. Ты должен вывести ответ в такой форме '
+              f'class1:marker1_class1,marker2_class2;class2:marker1_class2 и так далее'
+              f'В выводе ты должен написать только так, без размышлений и доводов ответ должен быть одной строчко'
+    )
     return str_to_markers(answer.output_text)
 
 
-def str_to_markers(text: str) -> str:
+def str_to_markers(text: str) -> Dict[str, List[str]]:
     result = dict()
     for class_markers in text.split(";"):
         cl, markers = class_markers.split(":")
