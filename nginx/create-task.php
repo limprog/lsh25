@@ -145,6 +145,9 @@ if (isset($_COOKIE["bearerToken"])){
 
         setTimeout(() => {
           eventLogModal("open", "check", "Задание создано!");
+          setTimeout(() => {
+            location.reload();
+          }, 1000)
         }, 1000)
       });
     });

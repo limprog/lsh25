@@ -115,6 +115,9 @@ if (curl_error($ch)){
 
     setTimeout(() => {
       eventLogModal("open", "check", "Задание удалено.");
+      setTimeout(() => {
+        location.reload();
+      }, 1000)
     }, 1000);
   }
 
