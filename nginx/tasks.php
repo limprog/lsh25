@@ -36,12 +36,12 @@ if (curl_error($ch)){
 <body>
   <?php include("header.php") ?>
   <main class="tasks-main">
-    <?php if ($userTasks !== false){ foreach ($userTasks as $task){ ?>
+    <?php if ($userTasks !== false){ foreach ($userTasks as $taskKey => $task){ ?>
       <div class="task-layout">
         <h2 class="title-task"><?php echo $task["name"] ?></h2>
         <p class="description-task"><?php echo $task["description"] ?></p>
         <div class="subtask-layout">
-          <?php foreach ($task["subtasks"] as $subtask){
+          <?php foreach ($task["subtasks"] as $subtaskKey => $subtask){
             if (isset($subtask["content"])){
               continue;
             }
@@ -51,7 +51,7 @@ if (curl_error($ch)){
             <div class="task-response-layout">
               <?php foreach ($task["responseFormat"] as $radio){ ?>
               <div class="radio-layout">
-                <input type="radio" value="<?php echo $radio["content"] ?>" disabled>
+                <input type="radio" value="<?php echo $radio["content"] ?>" name="<?php echo $taskKey . $subtaskKey ?>">
                 <label><?php echo $radio["content"] ?></label>
               </div>
               <?php } ?>
