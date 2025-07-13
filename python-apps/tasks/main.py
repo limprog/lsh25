@@ -1,107 +1,136 @@
-from fastapi import FastAPI, File, Response, Cookie
-from fastapi.responses import JSONResponse
-from typing import Dict, List, Tuple
-from database import untils
-from models import Task, SubtaskСomplite
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI, Response, Cookie, Body, status, HTTPException
+import bcrypt
+from pydantic import BaseModel
+from datetime import time
+from pymongo import MongoClient
 import requests
+import json
 
 
+
+def login(username: str, password: str) -> dict:
+    endpoint_url = "http://89.169.146.136:8765/users/auth"
+
+    reqData = {
+        "username": username,
+        "password": password
+    }
+
+    try:
+        # Отправляем POST-запрос на внешний эндпоинт
+        # Заголовок Content-Type: application/json указывает, что тело запроса - JSON
+        response = requests.post(endpoint_url, json=reqData)
+
+        # Проверяем, был ли запрос успешным (статус 2xx)
+        response.raise_for_status()
+
+        # Возвращаем JSON-ответ от эндпоинта
+        return response.json()
+
+    except requests.exceptions.HTTPError as http_err:
+        # Обработка ошибок HTTP (например, 404, 500)
+        return {"ok": False, "message": f"Ошибка HTTP: {http_err}", "details": response.text}
+    except requests.exceptions.ConnectionError as conn_err:
+        # Обработка ошибок подключения (например, сервер недоступен)
+        return {"ok": False, "message": f"Ошибка подключения: {conn_err}"}
+    except requests.exceptions.Timeout as timeout_err:
+        # Обработка ошибок тайм-аута
+        return {"ok": False, "message": f"Ошибка тайм-аута: {timeout_err}"}
+    except requests.exceptions.RequestException as req_err:
+        # Обработка любых других ошибок запроса
+        return {"ok": False, "message": f"Произошла ошибка: {req_err}"}
+    except json.JSONDecodeError:
+        # Обработка случая, когда ответ не является валидным JSON
+        return {"ok": False, "message": "Не удалось декодировать JSON из ответа", "raw_response": response.text}
+
+
+
+class User(BaseModel):
+    userLogin: str|None = None
+    password: str|None = None
+    score: int = 0
+    streek: int = 0
+    rights: str|None = None
+    create_date: time|None = None
+
+
+user_client = MongoClient('url')['tests']
 app = FastAPI()
-AI_API = "http://localhost:8003/"
 
 
-@app.post("/set-set_cookie")
-def set_set_cookie(res: Response, user: str):
-    res.set_cookie(value=user, key="userLogin")
-    return {"ok": True}
+@app.post('/register')
+def registration(new_user: User, response: Response) -> dict:
+    try:
+        if user_client.find_one({'userLogin': new_user.userLogin}):
+            return {'ok': False,
+                    'message': 'Имя пользователя уже занято!'}
+        new_user.password = bcrypt.hashpw(new_user.password.encode('utf-8'), bcrypt.gensalt())
+        user_client.insert_one({'userLogin': new_user.userLogin,
+                                'password': new_user.password,
+                                'score': new_user.score,
+                                'streek': new_user.streek,
+                                'rights': new_user.rights,
+                                'create_date': new_user.create_date,
+                                })
+        response.set_cookie(key="userLogin", value=new_user.userLogin)
+        return {'ok': True,
+                'message': 'Успешная регистрация!'}
+    except:
+        return {'ok': False,
+                'message': 'Ошибка на сервере!'}
+    
+
+@app.post('/login')
+async def login_user(
+    response: Response,
+    username: str = Body(..., description="Имя пользователя"),
+    password: str = Body(..., description="Пароль")
+) -> dict:
+    result = login(username, password)
+
+    if result.get("token"):
+        response.set_cookie(key = "bearerToken", value = result["token"], max_age = 3600)
+        response.status_code = status.HTTP_200_OK
+        return {
+            "ok": True
+        }
+    else:
+        response.status_code = status.HTTP_400_BAD_REQUEST
+        return {
+            "ok": False
+        }
 
 
-@app.post("/create-task")
-def create_task(task: Task, userLogin = Cookie(), markers: Dict[str, List[str]] | None = None):
-    answer = untils.create_task(task, userLogin)
-    task = task.dict()
-    print(answer)
-    if answer[0] != 0:
-        return JSONResponse(content={"answer": answer[1], "ok": False}, status_code=400)
-
-    if not (markers is None or set(markers.keys()).issubset([cl["content"] for cl in task["responseFormat"]])):
-        return JSONResponse(content={"answer": "markers error", "ok": False}, status_code=404)
-
-    r = requests.post(AI_API + "create-ai-task", json={"task_id": str(answer[2]),
-                                                       "classes": [cl["content"] for cl in task["responseFormat"]], "markers": markers,
-                                                       "description": task["description"],
-                                                       "name": task["name"]})
-
-    if r.status_code == 200:
-        return JSONResponse(content={"answer": answer[1], "id": str(answer[2]), "ok": True}, status_code=201)
-    delete_task(answer[2])
-    return JSONResponse(content={"answer": "ai modul is not working", "ok": False})
+@app.get('/get-users')
+def get_users():
+    users = user_client.find()
+    result = []
+    for user in users:
+        user['_id'] = str(user['_id'])
+        result.append(user)
+    return result
 
 
-@app.get("/get-tasks")
-def get_tasks():
-    tasks = untils.get_tasks()
-    return tasks
+@app.get('/get-user-data')
+def get_user_inf(login:str) -> dict:
+    user = user_client.find_one({'userLogin': login})
+    if user:
+        user['_id'] = str(user['_id'])
+        return user
+    return {'message': 'Пользователь не найден!'}
 
 
-@app.get("/get-history")
-def get_histary():
-    tasks = untils.get_history()
-    return tasks
-
-
-@app.get("/get-user-tasks")
-def get_tasks(userLogin = Cookie()):
-    print(userLogin)
-    tasks = untils.get_user_tasks(userLogin)
-    return tasks
-
-
-@app.get("/get-creater-task")
-def get_creator_task(userLogin = Cookie()):
-    print(userLogin)
-    tasks = untils.get_creator_task(userLogin)
-    return tasks
-
-
-@app.delete("/delete-task")
-def delete_task(id: str):
-    result = untils.delete_task(id)
-    if result[0] != 0:
-        return JSONResponse(content={"answer": result[1], "ok": False}, status_code=404)
-    r = requests.delete(AI_API + "/delete-ai-task", json={"task_id": id})
-    if r.status_code != 200:
-        return JSONResponse(content={"answer": "AI IS NOT WORKING", "ok": False}, status_code=404)
-
-    return JSONResponse(content={"answer": result[1], "ok": True}, status_code=200)
-
-
-@app.patch("/update-task")
-def update_task(id: str, task: Task):
-    task = task.dict()
-    result = untils.update_task(id, task)
-    if result[0] != 0:
-        return JSONResponse(content={"answer": result[1], "ok": False}, status_code=404)
-    r = requests.patch(AI_API + "/update-ai-task", json={"task_id": id, "classes": [cl["content"] for cl in task["responseFormat"]]})
-    if r.status_code != 200:
-        return JSONResponse(content={"answer": "AI IS NOT WORKING", "ok": False}, status_code=404)
-    return JSONResponse(content={"answer": result[1], "ok": True}, status_code=200)
-
-
-@app.put("/complete-subtask")
-def complete_subtask(data: SubtaskСomplite):
-    answer = untils.complete_subtask(data.dict())
-    if answer[0] == 1:
-        return JSONResponse(content={"answer": answer[1], "not_found_id": answer[2], "ok": False}, status_code=404)
-    elif answer[0] == 2:
-        return JSONResponse(content={"answer": answer[1], "key": answer[2], "ok": False}, status_code=415)
-    return JSONResponse(content={"answer": answer[1], "full_complete": answer[2], "ok": True}, status_code=200)
-
-
-@app.patch("/update-task-user")
-def update_executor(task_id: str, userLogin = Cookie()):
-    answer = untils.update_executor(task_id, userLogin)
-    if answer[0] == 1:
-        return JSONResponse(content={"answer": answer[1], "ok": False}, status_code=404)
-    return JSONResponse(content={"answer": answer[1], "ok": True}, status_code=200)
+@app.patch('/edit-password')
+def update_password(login:str, new_pasword:str) -> dict:
+    try:
+        user = user_client.find_one({'userLogin': login})
+        if user:
+            new_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+            user_client.update_one({'userLogin': login}, {'$set': {'password': new_password}})
+            return {'ok': True,
+                    'message': 'Пароль изменен!'}
+        return {'ok': False,
+                'message': 'Пользователь не найден'}
+    except:
+        return {'ok': False,
+                'message': 'Ошибка на сервере!'}
