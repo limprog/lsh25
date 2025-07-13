@@ -42,7 +42,7 @@ if (curl_error($ch)){
         <p class="description-task"><?php echo $task["description"] ?></p>
         <div class="subtask-layout">
           <?php foreach ($task["subtasks"] as $subtask){
-            if ($subtask["content"]){
+            if (!isset($subtask["content"])){
               continue;
             }
             ?>
