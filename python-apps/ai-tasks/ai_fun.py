@@ -2,13 +2,13 @@ from spacy import load
 from spacy.lang.ru import Russian
 from typing import List, Dict
 from openai import OpenAI
-from settings import AI_KEY
+import os
 
 
 nlp = Russian()
 load_model = load("ru_core_news_md")
 client = OpenAI(
-    api_key=AI_KEY,
+    api_key=os.getenv("AI_KEY"),
     base_url="https://api.proxyapi.ru/openai/v1")
 
 

@@ -70,6 +70,7 @@ services:
       # Используются имена сервисов (mongodb-users, mongodb-tasks) как хосты.
       MONGO_USERS_URI: mongodb://mongodb-users:27017/users_db
       MONGO_TASKS_URI: mongodb://mongodb-tasks:27017/tasks_db
+      AI_KEY: "sk-qd4cRXkAWmuE0rXgdXQEdgBUYM9Pr3qq"
     depends_on:
       # Указываем зависимости: этот сервис запустится после того, как запустятся MongoDB.
       # Это помогает с порядком запуска, но не гарантирует полную готовность БД.
@@ -112,6 +113,7 @@ services:
     depends_on:
       - python-app-tasks
       - python-app-users
+      - python-app-ai-tasks
       - php_fpm
     networks:
       - app_network
