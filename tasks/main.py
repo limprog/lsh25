@@ -98,7 +98,6 @@ def complete_subtask(data: SubtaskСomplite):
         return JSONResponse(content={"answer": answer[1], "key": answer[2], "ok": False}, status_code=415)
     if answer[2]:
         r = requests.patch("http://127.0.0.1:8000/user-update-score", params={"login": answer[4], "add_score": answer[3]})
-        print(r.status_code)
 
     return JSONResponse(content={"answer": answer[1], "full_complete": answer[2], "ok": True}, status_code=200)
 
