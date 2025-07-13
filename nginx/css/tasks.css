@@ -133,3 +133,21 @@ body{
     width: 100%;
     font-size: 15px;
 }
+
+
+
+.res-input{
+    height: 40px;
+    width: 300px;
+    box-sizing: border-box;
+    padding: 0 15px;
+    border: 1px black solid;
+    border-radius: 15px;
+    background-color: transparent;
+    font-size: 15px;
+    font-family: 'Manrope';
+    letter-spacing: 0.05em;
+}
+.res-input:focus{
+    outline: 2px black solid;
+}
