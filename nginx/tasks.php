@@ -52,7 +52,7 @@ if (curl_error($ch)){
               <?php foreach ($task["responseFormat"] as $radio){
                 if ($radio["content"] === "Свой ответ"){ ?>
                   <label><?php echo $radio["content"] ?></label>
-                  <input type="text" placeholder="Свой ответ" id="res-input-<?php echo $taskKey . $subtaskKey ?>">
+                  <input type="text" placeholder="Свой ответ" class="res-input" data-number="<?php echo $taskKey . $subtaskKey ?>">
                 <?php } else { ?>
                   <div class="radio-layout">
                     <input type="radio" value="<?php echo $radio["content"] ?>" name="<?php echo $taskKey . $subtaskKey ?>">
@@ -111,7 +111,7 @@ if (curl_error($ch)){
     }
 
     if (!Object.keys(requireSubstacks).length){
-      alert($(`#res-input-${index}${i}`).val());
+      alert($(`.res-input[name=${index}${i}]`).val());
 
       eventLogModal("open", "cross", "Выделите ответы.");
       return;
