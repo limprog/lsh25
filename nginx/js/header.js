@@ -91,7 +91,7 @@ modalSign.submit(() => {
       eventLogModal("open", "check", "Вы успешно вошли!");
       setTimeout(() => {
         location.reload();
-      }, 2000);
+      }, 1000);
     },
     error: function(jqXHR, textStatus, errorThrown) {
       if (jqXHR.responseJSON){

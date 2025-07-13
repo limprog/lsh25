@@ -61,9 +61,20 @@ body{
     }
     .task-save-btn{
         display: none;
+        .loader{
+            display: none;
+        }
     }
     .task-save-btn.active{
         display: flex;
+    }
+    .task-save-btn.disabled{
+        p{
+            display: none;
+        }
+        .loader{
+            display: block;
+        }
     }
 }
 .subtask-layout{

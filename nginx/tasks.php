@@ -61,7 +61,10 @@ if (curl_error($ch)){
         <p class="status-task"><?php echo $task["responseCount"] ?></p>
         <div class="task-event-layout">
           <button class="task-detailed-btn">Подробнее</button>
-          <button class="task-save-btn" data-quanity-subtask="<?php echo count($task["subtasks"]) ?>" >Сохранить</button>
+          <button class="task-save-btn" data-quanity-subtask="<?php echo count($task["subtasks"]) ?>" >
+            <p>Сохранить</p>
+            <span class="loader"></span>
+          </button>
         </div>
       </div>
     <?php }} ?>
@@ -107,6 +110,9 @@ if (curl_error($ch)){
       return;
     }
 
+    $(saveBtn[index]).prop("disabled", true);
+    $(saveBtn[index]).addClass("disabled");
+
     let data = {
       task_id: $(taskLayout[index]).data("task_id"),
       responseAnswer: requireSubstacks
@@ -114,7 +120,7 @@ if (curl_error($ch)){
 
     $.ajax({
       url: "/api/tasks/complete-subtask",
-      type: "put",
+      type: "PUT",
       contentType: "application/json",
       dataType: "json",
       data: JSON.stringify(data),
@@ -122,15 +128,15 @@ if (curl_error($ch)){
       success: (response) => {
         eventLogModal("open", "check", "Задание сохранено!");
         console.log(response);
-        /*setTimeout(() => {
+        setTimeout(() => {
           location.reload();
-        }, 2000);*/
+        }, 1000);
       },
       error: function(jqXHR, textStatus, errorThrown) {
         eventLogModal("open", "cross", "Ошибка на сервере.");
       },
       complete: function() {
-        signBtn.prop("disabled", false);
+        $(saveBtn[index]).removeClass("disabled");
       }
     });
   }
