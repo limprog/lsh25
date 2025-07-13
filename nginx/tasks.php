@@ -104,7 +104,10 @@ if (curl_error($ch)){
       console.log(i);
 
       if (!selectRadio.length){
-        alert($(`.res-input[name=${index}${i}]`).val());
+        let input = $(`.res-input[name=${index}${i}]`).val();
+        if (!input){
+          requireSubstacks[i] = input;
+        }
         continue;
       }
 
