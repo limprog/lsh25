@@ -7,7 +7,7 @@ if (isset($_COOKIE["bearerToken"])){
 
   require("check-role.php");
 
-  if ($userRole != "ROLE_ADMIN"){
+  if ($userRole !== "ROLE_ADMIN"){
     header("Location: /");
     exit;
   }
@@ -96,6 +96,32 @@ if (curl_error($ch)){
 
   function deleteTask(index){
 
+    $(deleteBtn[index]).prop("disabled", true);
+  
+    let data = {
+      task_id: $(taskLayout[index]).data("task_id")
+    };
+
+    $.ajax({
+      url: "/api/tasks/delete-task",
+      type: "DELETE",
+      contentType: "application/json",
+      dataType: "json",
+      data: JSON.stringify(data),
+
+      success: (response) => {
+        eventLogModal("open", "check", "Задание удалено.");
+        setTimeout(() => {
+          location.reload();
+        }, 1000);
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        eventLogModal("open", "cross", "Ошибка на сервере.");
+      },
+      complete: function() {
+        $(saveBtn[index]).removeClass("disabled");
+      }
+    });
   }
 
 
