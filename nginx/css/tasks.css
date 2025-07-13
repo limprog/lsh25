@@ -156,3 +156,8 @@ body{
 .res-input:focus{
     outline: 2px black solid;
 }
+@media (max-width: 500px) {
+    .res-input{
+        width: 100%;
+    }
+}
