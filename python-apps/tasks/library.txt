@@ -5,3 +5,4 @@ pydantic
 python-multipart
 bcrypt
 requests
+PIL
