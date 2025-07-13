@@ -90,6 +90,7 @@ if (curl_error($ch)){
   const taskLayout = $(".task-layout");
   const detailedBtn = $(".task-detailed-btn");
   const deleteBtn = $(".task-delete-btn");
+  const createBtn = $("create-task-btn");
 
 
 
@@ -127,7 +128,6 @@ if (curl_error($ch)){
   }
 
 
-
   detailedBtn.each((index, btn) => {
     $(btn).click(() => {
       eventDetailedTask(index);
@@ -139,5 +139,9 @@ if (curl_error($ch)){
       deleteTask(index);
     });
   });
+
+  createBtn.click(() => {
+    window.location = "/";
+  })
 </script>
 </html>
