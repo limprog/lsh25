@@ -57,6 +57,27 @@ services:
     networks:
       - app_network
 
+  #ai-tasks
+  python-app-tasks:
+    build: ../python-apps/ai-tasks # Указываем путь к папке с Dockerfile для сборки образа
+    container_name: ai_tasks_server
+    ports:
+      # Пробрасываем порт 8000 хоста на порт 8000 контейнера.
+      # Ваш Python-сервер должен слушать именно на порту 8000 внутри контейнера.
+      - "8003:8003"
+    environment:
+      # Переменные окружения для подключения Python-сервера к базам данных MongoDB.
+      # Используются имена сервисов (mongodb-users, mongodb-tasks) как хосты.
+      MONGO_USERS_URI: mongodb://mongodb-users:27017/users_db
+      MONGO_TASKS_URI: mongodb://mongodb-tasks:27017/tasks_db
+    depends_on:
+      # Указываем зависимости: этот сервис запустится после того, как запустятся MongoDB.
+      # Это помогает с порядком запуска, но не гарантирует полную готовность БД.
+      - mongodb-users
+      - mongodb-tasks
+    networks:
+      - app_network
+
   # --- Сервис 4: Python Server 2 ---
   # Второй бэкенд-сервер на Python.
   # Убедитесь, что рядом есть папка `python_server_2` с Dockerfile и кодом.
