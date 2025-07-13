@@ -111,6 +111,7 @@ if (curl_error($ch)){
     }
 
     if (!Object.keys(requireSubstacks).length){
+      alert($(`#res-input-${index}${i}`).val());
 
       eventLogModal("open", "cross", "Выделите ответы.");
       return;
