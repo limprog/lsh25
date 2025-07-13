@@ -99,8 +99,7 @@ if (curl_error($ch)){
     $.ajax({
       url: `/api/tasks/delete-task?id=${$(taskLayout[index]).data("task_id")}`,
       type: "DELETE",
-      data: data,
-
+      
       success: (response) => {
         eventLogModal("open", "check", "Задание удалено.");
         setTimeout(() => {
