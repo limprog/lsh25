@@ -38,7 +38,7 @@ if (curl_error($ch)){
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/tasks.css">
-  <title>Мои задания</title>
+  <title>Управление заданиями</title>
 </head>
 <body>
   <?php include("header.php") ?>
@@ -141,7 +141,7 @@ if (curl_error($ch)){
   });
 
   createBtn.click(() => {
-    window.location = "/";
+    window.location = "/create-tast.php";
   })
 </script>
 </html>
