@@ -16,14 +16,10 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_COOKIE, "userLogin=" . $_COOKIE["userLogin"]);
 $userTasks = curl_exec($ch);
 
-
-
-
 if (curl_error($ch)){
   $userTasks = false;
 } else {
   $userTasks = json_decode($userTasks, true);
-  echo $userTasks[0]["name"];
 }
 
 ?>
@@ -40,36 +36,31 @@ if (curl_error($ch)){
 <body>
   <?php include("header.php") ?>
   <main class="tasks-main">
-    <div class="task-layout">
-      <h2 class="title-task">Логическая связность высказываний</h2>
-      <p class="description-task">Оцени, логично ли связано второе предложение с первым. Задание на понимание причинно-следственных связей, особенно подходит для текстов с ИИ-анализом.</p>
-      <div class="subtask-layout">
-        <hr>
-        <p>Первый факт: "Пользователь забыл сохранить документ перед выключением компьютера."<br>Второй факт: "Файл был автоматически отправлен в облако и восстановился при включении."</p>
+    <?php if ($userTasks !== false){ foreach ($userTasks as $task){ ?>
+      <div class="task-layout">
+        <h2 class="title-task"><?php echo $task["name"] ?></h2>
+        <p class="description-task"><?php echo $task["description"] ?></p>
+        <div class="subtask-layout">
+          <?php foreach ($task["subtasks"] as $subtask){ ?>
+            <hr>
+            <p><?php echo $subtask["description"] ?></p>
+          </div>
+          <?php } ?>
         <div class="task-response-layout">
+          <?php foreach ($task["responseFormat"] as $radio){ ?>
           <div class="radio-layout">
-            <input type="radio" value="Логично" disabled>
-            <label>Логично</label>
+            <input type="radio" value="<?php echo $radio["content"] ?>" disabled>
+            <label><?php echo $radio["content"] ?></label>
           </div>
-          <div class="radio-layout">
-            <input type="radio" value="Возможно, логично, но не очевидно" disabled>
-            <label>Возможно, логично, но не очевидно</label>
-          </div>
-          <div class="radio-layout">
-            <input type="radio" value="Не логично" disabled>
-            <label>Не логично</label>
-          </div>
-          <div class="radio-layout">
-            <input type="radio" value="Свой ответ" disabled>
-            <label>Свой ответ</label>
-          </div>
+          <?php } ?>
+        </div>
+        <p class="status-task"><?php echo $task["responseCount"] ?></p>
+        <div class="task-event-layout">
+          <button class="task-detailed-btn">Подробнее</button>
         </div>
       </div>
-      <p class="status-task">Выполнено 0/1</p>
-      <div class="task-event-layout">
-        <button class="task-detailed-btn">Подробнее</button>
-      </div>
-    </div>
+    <?php }} ?>
+
   </main>
 </body>
 <script src="js/header.js"></script>
