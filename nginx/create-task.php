@@ -140,14 +140,12 @@ if (isset($_COOKIE["bearerToken"])){
           type: "POST",
           contentType: "application/json",
           dataType: "json",
-          data: JSON.stringify(data),
-
-          complete: function() {
-            setTimeout(() => {
-              eventLogModal("open", "check", "Задание создано!");
-            }, 1000)
-          }
+          data: JSON.stringify(data)
         });       
+
+        setTimeout(() => {
+          eventLogModal("open", "check", "Задание создано!");
+        }, 1000)
       });
     });
   </script>
