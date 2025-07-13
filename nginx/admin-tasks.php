@@ -90,7 +90,7 @@ if (curl_error($ch)){
   const taskLayout = $(".task-layout");
   const detailedBtn = $(".task-detailed-btn");
   const deleteBtn = $(".task-delete-btn");
-  const createBtn = $("create-task-btn");
+  const createBtn = $(".create-task-btn");
 
 
 
