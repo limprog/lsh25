@@ -2,8 +2,9 @@ from bson import ObjectId
 from pymongo import MongoClient
 from typing import List
 from ai_fun import lemmatize
+import os
 
-client = MongoClient('localhost', 27017)
+client = MongoClient("MONGO_TASKS_URI")
 db = client.ai_db
 table = db.ai
 
