@@ -88,9 +88,10 @@ if (curl_error($ch)){
   }
 
   function completeTask(index){
-    let quanitySubtasks = $(saveBtn[index]).data("quanity-subtask");
+    let quanitySubtasks = (int)$(saveBtn[index]).data("quanity-subtask");
     
-    for (i = 0, i < quanitySubtasks, i++){
+    
+    for (i = 0; i < quanitySubtasks; i++){
       let selectRadio = $(`input[name=${index}${i}]:checked`);
 
       if (!selectRadio.length){
