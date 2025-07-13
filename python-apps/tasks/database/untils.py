@@ -151,7 +151,7 @@ def image_save(data: list, name: str) -> list:
 
             img = Image.open(BytesIO(bytes_image))
 
-            path_img = f"images/{name}_{subtask["id"]}_{time.time()}.png"
+            path_img = f"images/{name}_{subtask['id']}_{time.time()}.png"
             img.save(path_img, "PNG")
             subtask.pop('image', None)
             subtask["image_path"] = path_img
