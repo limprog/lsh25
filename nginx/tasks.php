@@ -51,7 +51,7 @@ if (curl_error($ch)){
             <div class="task-response-layout">
               <?php foreach ($task["responseFormat"] as $radio){
                 if ($radio["content"] === "Свой ответ"){ ?>
-                  <div class="radio-layout" style="flex-direction: column;">
+                  <div class="radio-layout" style="flex-direction: column; align-items: start;">
                     <label><?php echo $radio["content"] ?></label>
                     <input type="text" placeholder="Свой ответ" class="res-input" name="<?php echo $taskKey . $subtaskKey ?>">
                   </div>
