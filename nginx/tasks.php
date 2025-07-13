@@ -10,9 +10,16 @@ if (isset($_COOKIE["bearerToken"])){
   exit;
 }
 
-$userTasks = file_get_contents("http://ai-firefly.ru/api/tasks/get-user-tasks");
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, "http://ai-firefly.ru/api/tasks/get-user-tasks");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_COOKIE, "userLogin=" . $_COOKIE["userLogin"]);
+$userTasks = curl_exec($ch);
 
-if ($userTasks === false){
+
+
+
+if (curl_error($ch)){
   $userTasks = false;
 } else {
   $userTasks = json_decode($userTasks, true);
