@@ -61,7 +61,7 @@ if (curl_error($ch)){
         <p class="status-task"><?php echo $task["responseCount"] ?></p>
         <div class="task-event-layout">
           <button class="task-detailed-btn">Подробнее</button>
-          <button class="task-save-btn">Сохранить</button>
+          <button class="task-save-btn" data-quanity-subtask="<?php echo count($task["subtasks"]) ?>" >Сохранить</button>
         </div>
       </div>
     <?php }} ?>
@@ -87,12 +87,32 @@ if (curl_error($ch)){
     }
   }
 
+  function completeTask(index){
+    let quanitySubtasks = $(saveBtn[index]).data("quanity-subtask");
+    
+    for (let i = 0, i < quanitySubtasks, i++){
+      let selectRadio = $(`input[name=${index . i}]`);
+
+      if (!selectRadio.length){
+        continue;
+      }
+
+      alert(selectRadio.val())
+    }
+  }
+
 
 
   detailedBtn.each((index, btn) => {
     $(btn).click(() => {
       eventDetailedTask(index);
-    })
-  })
+    });
+  });
+
+  saveBtn.each((index, btn) => {
+    $(btn).click(() => {
+      completeTask(index);
+    });
+  });
 </script>
 </html>
