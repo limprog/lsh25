@@ -91,7 +91,7 @@ if (curl_error($ch)){
     let quanitySubtasks = $(saveBtn[index]).data("quanity-subtask");
     
     for (let i = 0, i < quanitySubtasks, i++){
-      let selectRadio = $(`input[name=${index . i}]`);
+      let selectRadio = $(`input[name=${index}${i}]`);
 
       if (!selectRadio.length){
         continue;
