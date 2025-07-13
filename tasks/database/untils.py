@@ -101,11 +101,13 @@ def update_task(id: str, task: dict) -> tuple:
 
 def complete_subtask(data: dict) -> tuple:
     task = work.find_one({"_id": ObjectId(data["task_id"])})
+    if task is None:
+        return 1, "Not exist", "TASK"
+
+
     subtasks = task["subtasks"]
     compile_subtask_count = int(task["responseCount"].split("/")[0])
 
-    if task is None:
-        return 1, "Not exist", "TASK"
     answer_to_problems = data["responseAnswer"]
 
     for key in answer_to_problems:
@@ -125,7 +127,7 @@ def complete_subtask(data: dict) -> tuple:
         task["subtasks"] = subtasks
         task["responseCount"] = f"{compile_subtask_count}/{compile_subtask_count}"
         history.insert_one(task)
-        return 0, "Task completed", 1
+        return 0, "Task completed", 1, task["score"], task["userLogin"]
 
     work.update_one({"_id": ObjectId(data["task_id"])},
                     {"$set": {"subtasks": subtasks, "responseCount": f"{compile_subtask_count}/{len(subtasks)}"}})

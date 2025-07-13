@@ -8,7 +8,7 @@ import requests
 
 
 app = FastAPI()
-AI_API = "http://127.0.0.1:8001/"
+AI_API = "http://127.0.0.1:8002/"
 
 
 @app.post("/set-set_cookie")
@@ -35,7 +35,7 @@ def create_task(task: Task, userLogin = Cookie(), markers: Dict[str, List[str]] 
 
     if r.status_code == 200:
         return JSONResponse(content={"answer": answer[1], "id": str(answer[2]), "ok": True}, status_code=201)
-    delete_task(answer[2])
+    delete_task(str(answer[2]))
     return JSONResponse(content={"answer": "ai modul is not working", "ok": False})
 
 
@@ -96,6 +96,9 @@ def complete_subtask(data: SubtaskСomplite):
         return JSONResponse(content={"answer": answer[1], "not_found_id": answer[2], "ok": False}, status_code=404)
     elif answer[0] == 2:
         return JSONResponse(content={"answer": answer[1], "key": answer[2], "ok": False}, status_code=415)
+    if answer[2]:
+        r = requests.patch("http://127.0.0.1:8000/user-update-score", params={"login": answer[4], "add_score": answer[3]})
+
     return JSONResponse(content={"answer": answer[1], "full_complete": answer[2], "ok": True}, status_code=200)
 
 
