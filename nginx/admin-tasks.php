@@ -112,17 +112,10 @@ if (curl_error($ch)){
       url: `/api/tasks/delete-task?id=${$(taskLayout[index]).data("task_id")}`,
       type: "DELETE",
 
-      success: (response) => {
-        eventLogModal("open", "check", "Задание удалено.");
-        setTimeout(() => {
-          location.reload();
-        }, 1000);
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        eventLogModal("open", "cross", "Ошибка на сервере.");
-      },
       complete: function() {
-        $(saveBtn[index]).prop("disabled", false);
+        setTimeout(() => {
+          eventLogModal("open", "check", "Задание удалено.");
+        }, 1000);
       }
     });
   }

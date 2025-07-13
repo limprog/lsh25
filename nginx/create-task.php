@@ -142,15 +142,10 @@ if (isset($_COOKIE["bearerToken"])){
           dataType: "json",
           data: JSON.stringify(data),
 
-          success: (response) => {
-            eventLogModal("open", "check", "Задание создано!");
-            console.log(response);
-          },
-          error: function(jqXHR, textStatus, errorThrown) {
-            eventLogModal("open", "cross", "Ошибка на сервере.");
-          },
           complete: function() {
-            $(saveBtn[index]).removeClass("disabled");
+            setTimeout(() => {
+              eventLogModal("open", "check", "Задание создано!");
+            }, 1000)
           }
         });       
       });
