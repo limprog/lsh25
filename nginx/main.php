@@ -3,6 +3,9 @@
 if (isset($_COOKIE["bearerToken"])){
   $session = true;
   $bearerToken = $_COOKIE["bearerToken"];
+  $userLogin = $_COOKIE["userLogin"];
+  
+  require("check-role.php");
 } else {
   $session = false;
 }
