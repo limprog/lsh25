@@ -58,7 +58,7 @@ services:
       - app_network
 
   #ai-tasks
-  python-app-tasks:
+  python-app-ai-tasks:
     build: ../python-apps/ai-tasks # Указываем путь к папке с Dockerfile для сборки образа
     container_name: ai_tasks_server
     ports:
