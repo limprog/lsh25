@@ -66,12 +66,10 @@ if (curl_error($ch)){
             <hr>
             <p><?php echo $subtask["description"] ?></p>
             <div class="task-response-layout">
-              <?php foreach ($task["responseFormat"] as $radio){ ?>
                   <div class="radio-layout">
-                    <input type="radio" value="<?php echo $radio["content"] ?>" name="<?php echo $taskKey . $subtaskKey ?>" disabled>
-                    <label><?php echo $radio["content"] ?></label>
+                    <input type="radio" value="<?php echo $subtask["content"] ?>" disabled checked>
+                    <label><?php echo $subtask["content"] ?></label>
                   </div>
-              <?php } ?>
             </div>
             <?php } ?>
         </div>
