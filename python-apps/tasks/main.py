@@ -35,7 +35,7 @@ def create_task(task: Task, userLogin = Cookie(), markers: Dict[str, List[str]] 
 
     if r.status_code == 200:
         return JSONResponse(content={"answer": answer[1], "id": str(answer[2]), "ok": True}, status_code=201)
-    delete_task(answer[2])
+    delete_task(str(answer[2]))
     return JSONResponse(content={"answer": "ai modul is not working", "ok": False})
 
 
