@@ -141,7 +141,7 @@ if (curl_error($ch)){
   });
 
   createBtn.click(() => {
-    window.location = "/create-tast.php";
+    window.location = "/create-task.php";
   })
 </script>
 </html>
