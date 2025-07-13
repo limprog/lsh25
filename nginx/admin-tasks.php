@@ -95,16 +95,10 @@ if (curl_error($ch)){
   function deleteTask(index){
 
     $(deleteBtn[index]).prop("disabled", true);
-  
-    let data = {
-      id: $(taskLayout[index]).data("task_id")
-    };
 
     $.ajax({
-      url: "/api/tasks/delete-task",
+      url: `/api/tasks/delete-task?id=${$(taskLayout[index]).data("task_id")}`,
       type: "DELETE",
-      contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-      dataType: "json",
       data: data,
 
       success: (response) => {
