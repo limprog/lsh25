@@ -105,12 +105,12 @@ if (curl_error($ch)){
     }
 
     if (!requireSubstacks.length){
-      eventLogModal9("open", "cross", "Выделите ответы.");
+      eventLogModal("open", "cross", "Выделите ответы.");
       return;
     }
 
     let data = {
-      task_id: $(taskLayout[index].data("task_id")),
+      task_id: $(taskLayout[index]).data("task_id"),
       responseAnswer: requireSubstacks
     };
 
