@@ -1,4 +1,5 @@
-<!--if (isset($_COOKIE["bearerToken"])){
+<?php
+if (isset($_COOKIE["bearerToken"])){
   $session = true;
   $bearerToken = $_COOKIE["bearerToken"];
   $userLogin = $_COOKIE["userLogin"];
@@ -13,7 +14,8 @@
   $session = false;
   header("Location: /");
   exit;
-}-->
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
