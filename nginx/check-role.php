@@ -1,5 +1,8 @@
 <?php
 
+if (isset($_COOKIE["role"])){
+  $userRole = $_COOKIE["role"];
+} else {
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_URL, "http://89.169.146.136:8081/users/role?username=" . $userLogin);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -13,5 +16,6 @@
   } else {
     $userRole = $result;
   }
-  
+}
+
 ?>
