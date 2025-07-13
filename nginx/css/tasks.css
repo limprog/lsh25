@@ -170,6 +170,7 @@ body{
         font-family: 'Manrope';
         letter-spacing: 0.05em;
         color: black;
+        transition: all .2s;
     }
     .create-task-icon{
         height: 100%;
