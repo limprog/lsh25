@@ -1,0 +1,6 @@
+uvicorn
+fastapi
+pydantic
+pymongo
+bcrypt
+requests
