@@ -1,12 +1,12 @@
-from fastapi import FastAPI, Response, Cookie, Body, status, HTTPException
+from fastapi import FastAPI, Response, Cookie, Body, status, HTTPException, APIRouter
 import bcrypt
 from pydantic import BaseModel
 from datetime import time
 from pymongo import MongoClient
 import requests
 import json
-
-
+from pprint import pprint
+import os
 
 def login(username: str, password: str) -> dict:
     endpoint_url = "http://89.169.146.136:8765/users/auth"
@@ -52,32 +52,36 @@ class User(BaseModel):
     streek: int = 0
     rights: str|None = None
     create_date: time|None = None
+    email: str|None = None
 
 
-user_client = MongoClient('url')['tests']
+user_client = MongoClient(os.getenv("MONGO_USERS_URI"))['users']["user_db"]
 app = FastAPI()
 
 
 @app.post('/register')
 def registration(new_user: User, response: Response) -> dict:
-    try:
-        if user_client.find_one({'userLogin': new_user.userLogin}):
-            return {'ok': False,
-                    'message': 'Имя пользователя уже занято!'}
-        new_user.password = bcrypt.hashpw(new_user.password.encode('utf-8'), bcrypt.gensalt())
-        user_client.insert_one({'userLogin': new_user.userLogin,
-                                'password': new_user.password,
-                                'score': new_user.score,
-                                'streek': new_user.streek,
-                                'rights': new_user.rights,
-                                'create_date': new_user.create_date,
-                                })
-        response.set_cookie(key="userLogin", value=new_user.userLogin)
-        return {'ok': True,
-                'message': 'Успешная регистрация!'}
-    except:
+    new_user = new_user.dict()
+    if user_client.find_one({'userLogin': new_user["userLogin"]}):
         return {'ok': False,
-                'message': 'Ошибка на сервере!'}
+                'message': 'Имя пользователя уже занято!'}
+    new_user["password"] = bcrypt.hashpw(new_user["password"].encode('utf-8'), bcrypt.gensalt())
+    req = requests.post("http://89.169.146.136:8765/users/registration", json={"username": new_user["userLogin"], "password": str(new_user["password"]), "confirm_password": str(new_user["password"]), "email": new_user["email"]})
+    if req.status_code == 400:
+        return {'ok': False,
+                'message': 'Имя пользователя уже занято!'}
+    user_client.insert_one({'userLogin': new_user["userLogin"],
+                            'password': new_user["password"],
+                            'score': new_user["score"],
+                            'streek': new_user["streek"],
+                            'rights': "ROLE_ADMIN",
+                            'create_date': new_user["create_date"].isoformat(),
+                            "id": req.json()['id'],
+                            "email": new_user["email"]
+                            })
+    response.set_cookie(key="userLogin", value=new_user["userLogin"])
+    return {'ok': True,
+            'message': 'Успешная регистрация!'}
     
 
 @app.post('/login')
@@ -90,7 +94,6 @@ async def login_user(
 
     if result.get("token"):
         response.set_cookie(key = "bearerToken", value = result["token"], max_age = 3600)
-        response.set_cookie(key = "userLogin", value = username, max_age = 3600)
         response.status_code = status.HTTP_200_OK
         return {
             "ok": True
@@ -135,3 +138,28 @@ def update_password(login:str, new_pasword:str) -> dict:
     except:
         return {'ok': False,
                 'message': 'Ошибка на сервере!'}
+
+
+@app.patch('/user-change-role')
+def update_role(login:str) -> dict:
+    try:
+        user = user_client.find_one({'userLogin': login})
+        if user and user['rights'] == "ROLE_ADMIN":
+            user_client.update_one({'userLogin': login}, {'$set': {'role': "ROLE_USER"}})
+            user_id = user['id']
+            r = requests.request(f"http://89.169.146.136:8081/users/user/{user_id}")
+            if r.status_code == 200:
+                return {'ok': True}
+        return {'ok': False, "mes": "user not exist or his role user"}
+    except:
+        return {"ok": False, "mes": "server error"}
+
+
+@app.patch("/user-update-score")
+def update_score(login:str, add_score:int) -> dict:
+    user = user_client.find_one({'userLogin': login})
+    if not user:
+        return {'ok': False,"mes": "user not exist"}
+    score = user['score'] + add_score
+    user_client.update_one({'userLogin': login}, {'$set': {'score': score}})
+    return {'ok': True, "mes": "score updated successfully"}
